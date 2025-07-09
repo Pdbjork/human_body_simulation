@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Human Body Multi-Agent System</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --card-bg: #2b2b2b;
+            --text-color: #e0e0e0;
+            --border-color: #444;
+            --accent-color: #00bcd4;
+            --ok-color: #4caf50;
+            --warn-color: #ff9800;
+            --danger-color: #f44336;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: var(--accent-color);
+            font-weight: 300;
+        }
+        .main-controls {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+        .main-controls button {
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .main-controls button:hover {
+            background-color: #0097a7;
+        }
+        .system-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+        }
+        .system {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .system h3 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .system p {
+            margin: 5px 0;
+        }
+        .system .status {
+            font-style: italic;
+            color: var(--warn-color);
+        }
+        .system .data {
+            font-weight: bold;
+            color: #fff;
+        }
+        .ok { color: var(--ok-color); }
+        .warn { color: var(--warn-color); }
+        .danger { color: var(--danger-color); }
+    </style>
+</head>
+<body>
+
+    <h1>Enhanced Human Body Multi-Agent System</h1>
+
+    <div class="main-controls">
+        <h2>Global Controls</h2>
+        <button id="btnThreat">🚨 Detect Threat (Fight-or-Flight)</button>
+        <button id="btnIngestFood">🍔 Ingest Food</button>
+        <button id="btnRest">🛌 Rest & Recover</button>
+    </div>
+
+    <div class="system-grid">
+        <div id="main-app" class="system">
+            <h3>⚙️ Main_HumanApplication (100ms)</h3>
+            <p>Global State: <span id="main-state" class="status">Nominal</span></p>
+            <p>Homeostasis: <span id="homeostasis-status" class="status ok">Stable</span></p>
+            <p>Energy Stores: <span id="energy-stores" class="data">Normal</span></p>
+        </div>
+
+        <div id="nervous-system" class="system">
+            <h3>🧠 Nervous System (50ms)</h3>
+            <p>Primary Input: <span id="nervous-input" class="status">Monitoring...</span></p>
+            <p>ANS State: <span id="ans-state" class="data">Parasympathetic (Resting)</span></p>
+            <p>Commanding: <span id="nervous-command" class="status">Baseline Functions</span></p>
+        </div>
+
+        <div id="circulatory-system" class="system">
+            <h3>❤️ Circulatory System (10ms)</h3>
+            <p>Heart Rate: <span id="heart-rate" class="data">72 bpm</span></p>
+            <p>Blood Pressure: <span id="bp-status" class="data">Normal</span></p>
+            <p>Transporting: <span id="transport-status" class="status">Oxygen & Nutrients</span></p>
+        </div>
+
+        <div id="respiratory-system" class="system">
+            <h3>🫁 Respiratory System (10ms)</h3>
+            <p>Breathing Rate: <span id="breathing-rate" class="data">16 bpm</span></p>
+            <p>Blood O₂ Level: <span id="o2-level" class="data ok">98%</span></p>
+            <p>Blood CO₂ Level: <span id="co2-level" class="data ok">Nominal</span></p>
+        </div>
+
+        <div id="digestive-system" class="system">
+            <h3>🍽️ Digestive System (100ms)</h3>
+            <p>Status: <span id="digestive-status" class="status">Idle</span></p>
+            <p>Hunger Signal: <span id="hunger-signal" class="data">None</span></p>
+            <p>Nutrient Absorption: <span id="nutrient-absorption" class="data">No</span></p>
+        </div>
+
+        <div id="endocrine-system" class="system">
+            <h3>🧬 Endocrine System (100ms)</h3>
+            <p>Adrenaline (Epinephrine): <span id="adrenaline-level" class="data ok">Low</span></p>
+            <p>Cortisol (Stress): <span id="cortisol-level" class="data ok">Low</span></p>
+            <p>Insulin (Glucose Mgt): <span id="insulin-level" class="data">Baseline</span></p>
+        </div>
+
+        <div id="musculoskeletal-system" class="system">
+            <h3>🦴 Musculoskeletal System (10ms)</h3>
+            <p>Activity: <span id="muscle-activity" class="status">Resting</span></p>
+            <p>Energy (ATP): <span id="muscle-atp" class="data ok">100%</span></p>
+            <p>Feedback: <span id="muscle-feedback" class="status">None</span></p>
+        </div>
+
+        <div id="immune-system" class="system">
+            <h3>🧫 Immune System (500ms)</h3>
+            <p>Status: <span id="immune-status" class="status ok">Scanning</span></p>
+            <p>Alert Level: <span id="immune-alert" class="data">None</span></p>
+        </div>
+
+        <div id="excretory-system" class="system">
+            <h3>🧪 Excretory System (100ms)</h3>
+            <p>Blood Filtering: <span id="filter-status" class="status ok">Active</span></p>
+            <p>Fluid Balance: <span id="fluid-balance" class="data ok">Optimal</span></p>
+        </div>
+    </div>
+
+<script>
+    const dom = {
+        mainState: document.getElementById('main-state'), homeostasis: document.getElementById('homeostasis-status'), energyStores: document.getElementById('energy-stores'),
+        nervousInput: document.getElementById('nervous-input'), ansState: document.getElementById('ans-state'), nervousCommand: document.getElementById('nervous-command'),
+        heartRate: document.getElementById('heart-rate'), bpStatus: document.getElementById('bp-status'), transportStatus: document.getElementById('transport-status'),
+        breathingRate: document.getElementById('breathing-rate'), o2Level: document.getElementById('o2-level'), co2Level: document.getElementById('co2-level'),
+        digestiveStatus: document.getElementById('digestive-status'), hungerSignal: document.getElementById('hunger-signal'), nutrientAbsorption: document.getElementById('nutrient-absorption'),
+        adrenalineLevel: document.getElementById('adrenaline-level'), cortisolLevel: document.getElementById('cortisol-level'), insulinLevel: document.getElementById('insulin-level'),
+        muscleActivity: document.getElementById('muscle-activity'), muscleAtp: document.getElementById('muscle-atp'), muscleFeedback: document.getElementById('muscle-feedback'),
+        immuneStatus: document.getElementById('immune-status'), immuneAlert: document.getElementById('immune-alert'),
+        filterStatus: document.getElementById('filter-status'), fluidBalance: document.getElementById('fluid-balance'),
+    };
+
+    let humanState = {
+        isAlive: true, threatDetected: false, isResting: true, isDigesting: false,
+        foodIntake: 0, heartRate: 72, breathingRate: 16,
+        o2: 98, co2: 40, adrenaline: 0, cortisol: 0, insulin: 10,
+        atp: 100, nutrients: 20, hunger: 0,
+    };
+
+    const BASELINE = { heartRate: 72, breathingRate: 16, o2: 98, co2: 40 };
+
+    const updateClass = (el, val, thresholds, inverted = false) => {
+        el.classList.remove('ok', 'warn', 'danger');
+        let checkVal = inverted ? thresholds.danger - val : val;
+        let dangerLvl = inverted ? 0 : thresholds.danger;
+        let warnLvl = inverted ? (thresholds.danger - thresholds.warn) : thresholds.warn;
+
+        if (checkVal >= dangerLvl) el.classList.add('danger');
+        else if (checkVal >= warnLvl) el.classList.add('warn');
+        else el.classList.add('ok');
+    };
+    
+    document.getElementById('btnThreat').onclick = () => {
+        humanState.threatDetected = true;
+        humanState.isResting = false;
+        humanState.isDigesting = false;
+    };
+    document.getElementById('btnIngestFood').onclick = () => {
+        if (!humanState.threatDetected) {
+            humanState.foodIntake = 100;
+            humanState.isDigesting = true;
+        }
+    };
+    document.getElementById('btnRest').onclick = () => {
+        humanState.threatDetected = false;
+        humanState.isResting = true;
+    };
+
+    // Main Loop
+    setInterval(() => {
+        if (humanState.threatDetected) {
+            dom.mainState.textContent = 'Fight-or-Flight';
+            dom.mainState.className = 'status danger';
+            dom.energyStores.textContent = 'Mobilizing Glycogen & Fat';
+        } else if (humanState.isDigesting) {
+            dom.mainState.textContent = 'Rest and Digest';
+            dom.mainState.className = 'status ok';
+            dom.energyStores.textContent = 'Storing Energy (Glycogenesis)';
+        } else {
+            dom.mainState.textContent = 'Nominal';
+            dom.mainState.className = 'status ok';
+            dom.energyStores.textContent = 'Normal';
+        }
+        const homeostasisScore = Math.abs(humanState.heartRate - BASELINE.heartRate) + (Math.abs(humanState.breathingRate - BASELINE.breathingRate) * 2) + (Math.abs(humanState.o2 - BASELINE.o2) * 2) + Math.abs(humanState.co2 - BASELINE.co2);
+        if (homeostasisScore > 60) {
+            dom.homeostasis.textContent = 'Unstable';
+            dom.homeostasis.className = 'status danger';
+        } else if (homeostasisScore > 25) {
+            dom.homeostasis.textContent = 'Stressed';
+            dom.homeostasis.className = 'status warn';
+        } else {
+            dom.homeostasis.textContent = 'Stable';
+            dom.homeostasis.className = 'status ok';
+        }
+    }, 100);
+
+    // Nervous System
+    setInterval(() => {
+        if (humanState.threatDetected) {
+            dom.nervousInput.textContent = 'THREAT DETECTED';
+            dom.ansState.textContent = 'Sympathetic (Active)';
+            dom.nervousCommand.textContent = 'INITIATE STRESS RESPONSE';
+            humanState.adrenaline = Math.min(100, humanState.adrenaline + 10); // Faster spike
+            humanState.cortisol = Math.min(100, humanState.cortisol + 2);   // Slower build-up
+        } else {
+            dom.ansState.textContent = 'Parasympathetic (Resting)';
+            dom.nervousCommand.textContent = 'Baseline Functions';
+            humanState.adrenaline = Math.max(0, humanState.adrenaline - 5); // Faster decay
+            humanState.cortisol = Math.max(0, humanState.cortisol - 1);   // Slower decay
+            if (humanState.hunger > 60) {
+                 dom.nervousInput.textContent = 'Hunger Signal Received';
+            } else if (humanState.atp < 30) {
+                 dom.nervousInput.textContent = 'Fatigue Signal Received';
+            } else {
+                dom.nervousInput.textContent = 'Monitoring...';
+            }
+        }
+    }, 50);
+
+    // Circulatory System
+    setInterval(() => {
+        let targetHeartRate = BASELINE.heartRate;
+        if (humanState.threatDetected) targetHeartRate = 155;
+        else if (humanState.isDigesting) targetHeartRate = 85;
+        
+        if (humanState.heartRate < targetHeartRate) humanState.heartRate++;
+        if (humanState.heartRate > targetHeartRate) humanState.heartRate--;
+        
+        dom.heartRate.textContent = `${humanState.heartRate} bpm`;
+        updateClass(dom.heartRate, humanState.heartRate, { warn: 100, danger: 140 });
+        
+        if (humanState.heartRate > 130) dom.bpStatus.textContent = 'High';
+        else if (humanState.heartRate > 90) dom.bpStatus.textContent = 'Elevated';
+        else dom.bpStatus.textContent = 'Normal';
+    }, 10);
+
+    // Respiratory System
+    setInterval(() => {
+        let targetBreathingRate = BASELINE.breathingRate;
+        if (humanState.threatDetected) targetBreathingRate = 32;
+        
+        if (humanState.breathingRate < targetBreathingRate) humanState.breathingRate++;
+        if (humanState.breathingRate > targetBreathingRate) humanState.breathingRate--;
+        
+        dom.breathingRate.textContent = `${humanState.breathingRate} bpm`;
+        updateClass(dom.breathingRate, humanState.breathingRate, { warn: 24, danger: 30 });
+        
+        let o2Consumption = humanState.heartRate / 150;
+        let o2Intake = humanState.breathingRate / 12;
+        humanState.o2 = Math.min(99, Math.max(85, humanState.o2 + o2Intake - o2Consumption));
+        humanState.co2 = Math.max(35, humanState.co2 - (humanState.breathingRate / 16) + (humanState.heartRate / 100));
+        
+        dom.o2Level.textContent = `${Math.round(humanState.o2)}%`;
+        updateClass(dom.o2Level, humanState.o2, { warn: 94, danger: 90 }, true);
+        
+        dom.co2Level.textContent = humanState.co2 > 45 ? 'High' : 'Nominal';
+        updateClass(dom.co2Level, humanState.co2, { warn: 46, danger: 50 });
+    }, 10);
+    
+    // Digestive System
+    setInterval(() => {
+        if (humanState.threatDetected) {
+            dom.digestiveStatus.textContent = 'Inhibited (Stress)';
+            dom.nutrientAbsorption.textContent = 'No';
+        } else if (humanState.isDigesting) {
+            dom.digestiveStatus.textContent = 'Active (Peristalsis)';
+            dom.nutrientAbsorption.textContent = 'Yes';
+            humanState.foodIntake = Math.max(0, humanState.foodIntake - 2);
+            humanState.nutrients = Math.min(100, humanState.nutrients + 1.5);
+            humanState.hunger = Math.max(0, humanState.hunger - 5);
+            if (humanState.foodIntake <= 0) humanState.isDigesting = false;
+        } else {
+            dom.digestiveStatus.textContent = 'Idle';
+            dom.nutrientAbsorption.textContent = 'No';
+            humanState.hunger = Math.min(100, humanState.hunger + 0.5);
+            humanState.nutrients = Math.max(0, humanState.nutrients - 0.2);
+        }
+        dom.hungerSignal.textContent = humanState.hunger > 70 ? 'Strong' : (humanState.hunger > 30 ? 'Moderate' : 'None');
+    }, 100);
+
+    // Endocrine System
+    setInterval(() => {
+        if(humanState.isDigesting && humanState.foodIntake > 80) { // Insulin spike after eating
+            humanState.insulin = Math.min(100, humanState.insulin + 15);
+        } else {
+            humanState.insulin = Math.max(10, humanState.insulin - 1);
+        }
+        dom.adrenalineLevel.textContent = humanState.adrenaline > 70 ? 'High' : (humanState.adrenaline > 20 ? 'Elevated' : 'Low');
+        dom.cortisolLevel.textContent = humanState.cortisol > 60 ? 'High' : (humanState.cortisol > 20 ? 'Elevated' : 'Low');
+        dom.insulinLevel.textContent = humanState.insulin > 80 ? 'High' : (humanState.insulin > 30 ? 'Elevated' : 'Baseline');
+        updateClass(dom.adrenalineLevel, humanState.adrenaline, { warn: 21, danger: 71 });
+        updateClass(dom.cortisolLevel, humanState.cortisol, { warn: 21, danger: 61 });
+    }, 100);
+
+    // Musculoskeletal System
+    setInterval(() => {
+        if (humanState.threatDetected) {
+            dom.muscleActivity.textContent = 'Tensed & Primed';
+            humanState.atp = Math.max(0, humanState.atp - 0.5);
+        } else if (humanState.isResting) {
+            dom.muscleActivity.textContent = 'Resting';
+            if (humanState.nutrients > 10) {
+                 humanState.atp = Math.min(100, humanState.atp + 0.2);
+            }
+        }
+        dom.muscleAtp.textContent = `${Math.round(humanState.atp)}%`;
+        updateClass(dom.muscleAtp, humanState.atp, { warn: 50, danger: 20 }, true);
+        dom.muscleFeedback.textContent = humanState.atp < 20 ? 'Signaling Fatigue' : 'None';
+    }, 10);
+    
+    // Immune System
+    setInterval(() => {
+        if(humanState.cortisol > 60) {
+            dom.immuneStatus.textContent = 'Suppressed (High Cortisol)';
+            dom.immuneStatus.className = 'status warn';
+        } else {
+            dom.immuneStatus.textContent = 'Scanning';
+            dom.immuneStatus.className = 'status ok';
+        }
+    }, 500);
+    
+    // Excretory System
+    setInterval(() => {
+        if(humanState.adrenaline > 50) {
+            dom.filterStatus.textContent = 'Reduced (Vasoconstriction)';
+            dom.filterStatus.className = 'status warn';
+        } else {
+            dom.filterStatus.textContent = 'Active';
+            dom.filterStatus.className = 'status ok';
+        }
+    }, 100);
+</script>
+</body>
+</html>
