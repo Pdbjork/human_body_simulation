@@ -156,6 +156,14 @@
             <p>Blood Filtering: <span id="filter-status" class="status ok">Active</span></p>
             <p>Fluid Balance: <span id="fluid-balance" class="data ok">Optimal</span></p>
         </div>
+
+        <div id="brain-system" class="system">
+            <h3>🧠 Brain System (20ms)</h3>
+            <p>Conscious State: <span id="brain-conscious" class="data">Awake</span></p>
+            <p>Focus Level: <span id="brain-focus" class="data">Normal</span></p>
+            <p>Stress Perception: <span id="brain-stress" class="status">Low</span></p>
+            <p>Command Output: <span id="brain-command" class="status">Monitoring Body</span></p>
+        </div>
     </div>
 
 <script>
@@ -169,6 +177,10 @@
         muscleActivity: document.getElementById('muscle-activity'), muscleAtp: document.getElementById('muscle-atp'), muscleFeedback: document.getElementById('muscle-feedback'),
         immuneStatus: document.getElementById('immune-status'), immuneAlert: document.getElementById('immune-alert'),
         filterStatus: document.getElementById('filter-status'), fluidBalance: document.getElementById('fluid-balance'),
+        brainConscious: document.getElementById('brain-conscious'),
+        brainFocus: document.getElementById('brain-focus'),
+        brainStress: document.getElementById('brain-stress'),
+        brainCommand: document.getElementById('brain-command'),
     };
 
     let humanState = {
@@ -176,6 +188,11 @@
         foodIntake: 0, heartRate: 72, breathingRate: 16,
         o2: 98, co2: 40, adrenaline: 0, cortisol: 0, insulin: 10,
         atp: 100, nutrients: 20, hunger: 0,
+        brain: {
+            conscious: true,
+            focus: 60, // 0-100
+            perceivedStress: 0, // 0-100
+        },
     };
 
     const BASELINE = { heartRate: 72, breathingRate: 16, o2: 98, co2: 40 };
@@ -370,6 +387,45 @@
             dom.filterStatus.className = 'status ok';
         }
     }, 100);
-</script>
-</body>
+
+    // Brain System
+    setInterval(() => {
+        // Conscious state
+        dom.brainConscious.textContent = humanState.brain.conscious ? 'Awake' : 'Asleep';
+
+        // Focus drops if tired, rises if threat, normalizes otherwise
+        if (humanState.threatDetected) {
+            humanState.brain.focus = Math.min(100, humanState.brain.focus + 2);
+            dom.brainCommand.textContent = 'Coordinating Stress Response';
+        } else if (humanState.atp < 30) {
+            humanState.brain.focus = Math.max(10, humanState.brain.focus - 1);
+            dom.brainCommand.textContent = 'Signaling Fatigue';
+        } else {
+            humanState.brain.focus += (60 - humanState.brain.focus) * 0.05;
+            dom.brainCommand.textContent = 'Monitoring Body';
+        }
+        dom.brainFocus.textContent = Math.round(humanState.brain.focus);
+
+        // Perceived stress follows cortisol and adrenaline
+        humanState.brain.perceivedStress = (humanState.cortisol * 0.6 + humanState.adrenaline * 0.4);
+        if (humanState.brain.perceivedStress > 70) {
+            dom.brainStress.textContent = 'High';
+            dom.brainStress.className = 'status danger';
+        } else if (humanState.brain.perceivedStress > 30) {
+            dom.brainStress.textContent = 'Elevated';
+            dom.brainStress.className = 'status warn';
+        } else {
+            dom.brainStress.textContent = 'Low';
+            dom.brainStress.className = 'status ok';
+        }
+    }, 20);
+
+
+
+
+</script>    }, 20);        }            dom.brainStress.className = 'status ok';</script></html></body></script>    }, 20);        }            dom.brainStress.className = 'status ok';</script>
+
+
+
+</html></body></body>
 </html>
