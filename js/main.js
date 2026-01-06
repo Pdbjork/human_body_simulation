@@ -3,6 +3,7 @@ import { NervousSystem, CirculatorySystem, RespiratorySystem } from './systems/c
 import { DigestiveSystem, EndocrineSystem, MusculoskeletalSystem } from './systems/metabolic_systems.js';
 import { ImmuneSystem, ExcretorySystem, BrainSystem } from './systems/defense_systems.js';
 import { Diagnoses, UserProfile } from './diagnoses.js';
+import { HealthParser } from './health_parser.js';
 
 class HumanSimulation {
     constructor() {
@@ -102,6 +103,56 @@ class HumanSimulation {
                 };
                 diagContainer.appendChild(div);
             });
+        }
+
+        // Apple Health Import
+        const fileInput = document.getElementById('health-file');
+        const statusText = document.getElementById('import-status');
+
+        if (fileInput) {
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                statusText.textContent = "Parsing XML... (This may take a moment)";
+                statusText.className = "status-text";
+
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    try {
+                        const xmlContent = evt.target.result;
+                        const parser = new HealthParser();
+                        const data = parser.parse(xmlContent);
+
+                        console.log("Parsed Health Data:", data);
+
+                        if (data.restingHeartRate) {
+                            UserProfile.restingHeartRate = data.restingHeartRate;
+                            // Update UI
+                            if (rhrInput) rhrInput.value = data.restingHeartRate;
+
+                            // Reset Sim
+                            if (!globalState.threatDetected && globalState.atp > 50) {
+                                globalState.heartRate = UserProfile.restingHeartRate;
+                            }
+                        }
+
+                        if (data.averageSteps > 0) {
+                            // Simple logic: > 8000 steps = fit
+                            UserProfile.fitnessLevel = data.averageSteps > 8000 ? 1.5 : (data.averageSteps > 4000 ? 1.0 : 0.8);
+                        }
+
+                        statusText.textContent = `✅ Imported! RHR: ${data.restingHeartRate} | Avg Steps: ${data.averageSteps}`;
+                        statusText.className = "status-text success";
+
+                    } catch (err) {
+                        console.error(err);
+                        statusText.textContent = "❌ Error parsing file.";
+                        statusText.className = "status-text error";
+                    }
+                };
+                reader.readAsText(file);
+            };
         }
     }
 
