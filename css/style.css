@@ -1,0 +1,195 @@
+:root {
+    --bg-dark: #121212;
+    --bg-panel: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    
+    --accent-primary: #00bcd4; /* Cyan */
+    --accent-danger: #f44336;  /* Red */
+    --accent-warning: #ff9800; /* Orange */
+    --accent-success: #4caf50; /* Green */
+    --accent-action: #9c27b0;  /* Purple */
+
+    --font-ui: 'Segoe UI', system-ui, sans-serif;
+    --border-radius: 8px;
+    --border-color: #333;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    margin: 0 0 10px 0;
+    font-weight: 300;
+}
+
+h1 .version {
+    font-size: 0.5em;
+    opacity: 0.5;
+    vertical-align: middle;
+}
+
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Header & Controls */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-panel);
+    padding: 15px 25px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.main-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+.control-btn:hover { filter: brightness(1.2); }
+.control-btn:active { transform: scale(0.98); }
+
+.control-btn.primary { background-color: var(--accent-primary); color: #000; }
+.control-btn.danger { background-color: var(--accent-danger); }
+.control-btn.warning { background-color: var(--accent-warning); color: #000; }
+.control-btn.action { background-color: var(--accent-action); }
+
+/* Dashboard Layout */
+.dashboard {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+}
+
+/* Global Status Panel */
+.global-status {
+    grid-column: 1 / -1;
+    background: var(--bg-panel);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.status-grid {
+    display: flex;
+    gap: 30px;
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card .label {
+    font-size: 0.85em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card .value {
+    font-size: 1.5em;
+    font-weight: 500;
+    color: var(--accent-primary);
+}
+
+/* Visualization (Left Column) */
+.visualization {
+    grid-column: 1 / 2;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.anatomy-placeholder {
+    width: 100px;
+    height: 300px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+/* This will be animated by JS */
+.body-outline.stressed { box-shadow: 0 0 30px var(--accent-danger); }
+.body-outline.resting { box-shadow: 0 0 30px var(--accent-primary); }
+
+
+/* Systems Grid (Right Column) */
+.systems-container {
+    grid-column: 2 / 3;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.system-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    transition: transform 0.2s;
+}
+.system-card:hover { transform: translateY(-2px); border-color: #555; }
+
+.system-card h3 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1em;
+}
+
+.system-card .metric-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.95em;
+}
+
+.metric-label { color: var(--text-muted); }
+.metric-value { font-weight: bold; }
+
+/* Utility Classes for Values */
+.val-ok { color: var(--accent-success); }
+.val-warn { color: var(--accent-warning); }
+.val-danger { color: var(--accent-danger); }
+.val-info { color: var(--accent-primary); }
+
+@media (max-width: 900px) {
+    .dashboard { grid-template-columns: 1fr; }
+    .visualization { grid-column: 1 / -1; height: 150px; min-height: auto; }
+    .systems-container { grid-column: 1 / -1; }
+}

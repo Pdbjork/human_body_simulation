@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Body Multi-Agent Simulation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Human Body Simulation <span class="version">v2.0</span></h1>
+            <div class="main-controls">
+                <button id="btnThreat" class="control-btn danger">🚨 Threat (Fight/Flight)</button>
+                <button id="btnFood" class="control-btn action">🍔 Ingest Food</button>
+                <button id="btnRest" class="control-btn primary">🛌 Rest & Recover</button>
+                <button id="btnExercise" class="control-btn warning">🏃 Exercise</button>
+            </div>
+        </header>
+
+        <main class="dashboard">
+            <!-- Global Status Panel -->
+            <section class="panel global-status">
+                <h2>Global State</h2>
+                <div class="status-grid">
+                    <div class="stat-card">
+                        <span class="label">Overall Status</span>
+                        <span id="global-state" class="value">Nominal</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="label">Homeostasis</span>
+                        <span id="homeostasis-score" class="value">100%</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="label">Simulation Tick</span>
+                        <span id="sim-tick" class="value">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualization Area (Placeholder for generic body viz) -->
+            <section class="panel visualization" id="body-viz">
+                <div class="anatomy-placeholder">
+                    <!-- Simple CSS/SVG anatomy will go here via JS -->
+                    <div class="body-outline"></div>
+                </div>
+            </section>
+
+            <!-- Systems Grid -->
+            <section class="systems-container">
+                <div id="nervous-system" class="system-card"></div>
+                <div id="circulatory-system" class="system-card"></div>
+                <div id="respiratory-system" class="system-card"></div>
+                <div id="digestive-system" class="system-card"></div>
+                <div id="endocrine-system" class="system-card"></div>
+                <div id="musculoskeletal-system" class="system-card"></div>
+                <div id="immune-system" class="system-card"></div>
+                <div id="excretory-system" class="system-card"></div>
+                <div id="brain-system" class="system-card"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Main Module -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
