@@ -53,16 +53,39 @@ export class CirculatorySystem extends SystemAgent {
 
     process(dt) {
         // Heart rate mechanics
-        let targetHR = 70;
-        if (globalState.threatDetected) targetHR = 160;
-        else if (globalState.adrenaline > 20) targetHR = 70 + globalState.adrenaline; // Linear correlation
+        let restingHR = globalState.userProfile ? globalState.userProfile.restingHeartRate : 70;
+
+        let targetHR = restingHR;
+        if (globalState.threatDetected) targetHR = restingHR + 90;
+        else if (globalState.adrenaline > 20) targetHR = restingHR + globalState.adrenaline; // Linear correlation
+
+        // Apply Hypertension modifier
+        let sysBP = 120;
+        let diaBP = 80;
+
+        if (globalState.activeConditions && globalState.activeConditions.has('hypertension')) {
+            sysBP += 20;
+            diaBP += 10;
+            targetHR += 5; // Slightly elevated
+        }
+
+        if (globalState.activeConditions && globalState.activeConditions.has('anxiety')) {
+            targetHR += 10;
+        }
 
         // Smooth transition
         if (globalState.heartRate < targetHR) globalState.heartRate++;
         if (globalState.heartRate > targetHR) globalState.heartRate--;
 
         // Blood Pressure (Simulated)
-        this.bp = globalState.heartRate > 100 ? '140/90 (High)' : '120/80 (Normal)';
+        // Dynamic BP based on HR
+        let load = (globalState.heartRate - restingHR) / 2;
+        sysBP += load;
+        diaBP += load / 2;
+
+        this.bp = `${Math.round(sysBP)}/${Math.round(diaBP)}`;
+        if (sysBP > 140 || diaBP > 90) this.bp += ' (High)';
+        else this.bp += ' (Normal)';
     }
 
     getMetrics() {
@@ -89,15 +112,25 @@ export class RespiratorySystem extends SystemAgent {
         // Breathing follows Heart Rate somewhat
         let targetBR = 14 + (globalState.heartRate - 70) / 4;
 
+        // Asthma modifier
+        let airwayResistance = 1.0;
+        if (globalState.activeConditions && globalState.activeConditions.has('asthma')) {
+            // If stressed or exercising, asthma triggers
+            if (globalState.heartRate > 100) {
+                airwayResistance = 2.0; // Harder to breathe
+                targetBR += 5; // Compensate with faster breathing
+            }
+        }
+
         if (globalState.breathingRate < targetBR) globalState.breathingRate += 0.5;
         if (globalState.breathingRate > targetBR) globalState.breathingRate -= 0.5;
 
         // Gas exchange logic
         // High HR consumes O2
         const consumption = globalState.heartRate / 1000;
-        const intake = globalState.breathingRate / 500;
+        const intake = (globalState.breathingRate / 500) / airwayResistance; // Resistance reduces intake
 
-        globalState.o2Saturation = Math.min(100, Math.max(80, globalState.o2Saturation + intake - consumption));
+        globalState.o2Saturation = Math.min(100, Math.max(75, globalState.o2Saturation + intake - consumption));
     }
 
     getMetrics() {

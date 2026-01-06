@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Human Body Multi-Agent Simulation</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div class="app-container">
         <header>
@@ -39,12 +41,30 @@
             </section>
 
             <!-- Visualization Area (Placeholder for generic body viz) -->
-            <section class="panel visualization" id="body-viz">
-                <div class="anatomy-placeholder">
-                    <!-- Simple CSS/SVG anatomy will go here via JS -->
-                    <div class="body-outline"></div>
-                </div>
-            </section>
+            <!-- Visualization (Left Column) -->
+            <div class="left-col">
+                <section class="panel visualization" id="body-viz">
+                    <div class="anatomy-placeholder">
+                        <div class="body-outline"></div>
+                    </div>
+                </section>
+
+                <section class="panel config-panel">
+                    <h3>👤 Configuration</h3>
+
+                    <div class="config-group">
+                        <label>Resting HR (bpm)</label>
+                        <input type="number" id="input-rhr" value="70" min="40" max="100">
+                    </div>
+
+                    <div class="config-group">
+                        <h4>Diagnoses / Conditions</h4>
+                        <div id="diagnoses-list" class="checkbox-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+            </div>
 
             <!-- Systems Grid -->
             <section class="systems-container">
@@ -64,4 +84,5 @@
     <!-- Main Module -->
     <script type="module" src="js/main.js"></script>
 </body>
+
 </html>

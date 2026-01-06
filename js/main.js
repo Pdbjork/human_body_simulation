@@ -2,6 +2,7 @@ import { bus, globalState } from './state.js';
 import { NervousSystem, CirculatorySystem, RespiratorySystem } from './systems/core_systems.js';
 import { DigestiveSystem, EndocrineSystem, MusculoskeletalSystem } from './systems/metabolic_systems.js';
 import { ImmuneSystem, ExcretorySystem, BrainSystem } from './systems/defense_systems.js';
+import { Diagnoses, UserProfile } from './diagnoses.js';
 
 class HumanSimulation {
     constructor() {
@@ -22,7 +23,12 @@ class HumanSimulation {
         this.systems.push(new MusculoskeletalSystem());
         this.systems.push(new ImmuneSystem());
         this.systems.push(new ExcretorySystem());
+        this.systems.push(new ExcretorySystem());
         this.systems.push(new BrainSystem());
+
+        // Link globally for debugging
+        globalState.userProfile = UserProfile;
+        globalState.activeConditions = UserProfile.diagnoses;
 
         this.setupControls();
         this.startLoop();
@@ -57,6 +63,46 @@ class HumanSimulation {
         document.getElementById('btnExercise').onclick = () => {
             bus.emit('start-exercise');
         };
+
+        // --- Health Data & Diagnoses UI ---
+
+        // Resting Heart Rate Input
+        const rhrInput = document.getElementById('input-rhr');
+        if (rhrInput) {
+            rhrInput.value = UserProfile.restingHeartRate;
+            rhrInput.onchange = (e) => {
+                UserProfile.restingHeartRate = parseInt(e.target.value);
+                // Reset HR to new baseline if resting
+                if (!globalState.threatDetected && globalState.atp > 50) {
+                    globalState.heartRate = UserProfile.restingHeartRate;
+                }
+            };
+        }
+
+        // Diagnoses Checkboxes
+        const diagContainer = document.getElementById('diagnoses-list');
+        if (diagContainer) {
+            diagContainer.innerHTML = ''; // clear placeholder
+            Object.values(Diagnoses).forEach(diag => {
+                const div = document.createElement('div');
+                div.className = 'diag-item';
+                div.innerHTML = `
+                    <label>
+                        <input type="checkbox" value="${diag.id}">
+                        ${diag.name}
+                    </label>
+                `;
+                const checkbox = div.querySelector('input');
+                checkbox.onchange = (e) => {
+                    if (e.target.checked) {
+                        UserProfile.diagnoses.add(diag.id);
+                    } else {
+                        UserProfile.diagnoses.delete(diag.id);
+                    }
+                };
+                diagContainer.appendChild(div);
+            });
+        }
     }
 
     startLoop() {

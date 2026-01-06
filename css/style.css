@@ -3,12 +3,17 @@
     --bg-panel: #1e1e1e;
     --text-main: #e0e0e0;
     --text-muted: #a0a0a0;
-    
-    --accent-primary: #00bcd4; /* Cyan */
-    --accent-danger: #f44336;  /* Red */
-    --accent-warning: #ff9800; /* Orange */
-    --accent-success: #4caf50; /* Green */
-    --accent-action: #9c27b0;  /* Purple */
+
+    --accent-primary: #00bcd4;
+    /* Cyan */
+    --accent-danger: #f44336;
+    /* Red */
+    --accent-warning: #ff9800;
+    /* Orange */
+    --accent-success: #4caf50;
+    /* Green */
+    --accent-action: #9c27b0;
+    /* Purple */
 
     --font-ui: 'Segoe UI', system-ui, sans-serif;
     --border-radius: 8px;
@@ -24,7 +29,9 @@ body {
     box-sizing: border-box;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     margin: 0 0 10px 0;
     font-weight: 300;
 }
@@ -71,13 +78,32 @@ header {
     transition: all 0.2s;
     font-weight: 600;
 }
-.control-btn:hover { filter: brightness(1.2); }
-.control-btn:active { transform: scale(0.98); }
 
-.control-btn.primary { background-color: var(--accent-primary); color: #000; }
-.control-btn.danger { background-color: var(--accent-danger); }
-.control-btn.warning { background-color: var(--accent-warning); color: #000; }
-.control-btn.action { background-color: var(--accent-action); }
+.control-btn:hover {
+    filter: brightness(1.2);
+}
+
+.control-btn:active {
+    transform: scale(0.98);
+}
+
+.control-btn.primary {
+    background-color: var(--accent-primary);
+    color: #000;
+}
+
+.control-btn.danger {
+    background-color: var(--accent-danger);
+}
+
+.control-btn.warning {
+    background-color: var(--accent-warning);
+    color: #000;
+}
+
+.control-btn.action {
+    background-color: var(--accent-action);
+}
 
 /* Dashboard Layout */
 .dashboard {
@@ -120,8 +146,37 @@ header {
 }
 
 /* Visualization (Left Column) */
-.visualization {
+
+
+.anatomy-placeholder {
+    width: 100px;
+    height: 300px;
+    background: #333;
+    border-radius: 50px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* This will be animated by JS */
+/* This will be animated by JS */
+.body-outline.stressed {
+    box-shadow: 0 0 30px var(--accent-danger);
+}
+
+.body-outline.resting {
+    box-shadow: 0 0 30px var(--accent-primary);
+}
+
+.left-col {
     grid-column: 1 / 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Visualization (Left Column) */
+.visualization {
+    /* removed grid column as it is now inside left-col */
     background: var(--bg-panel);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -133,17 +188,52 @@ header {
     overflow: hidden;
 }
 
-.anatomy-placeholder {
-    width: 100px;
-    height: 300px;
-    background: #333;
-    border-radius: 50px;
-    position: relative;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+/* Config Panel */
+.config-panel {
+    background: var(--bg-panel);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
-/* This will be animated by JS */
-.body-outline.stressed { box-shadow: 0 0 30px var(--accent-danger); }
-.body-outline.resting { box-shadow: 0 0 30px var(--accent-primary); }
+
+.config-group {
+    margin-bottom: 20px;
+}
+
+.config-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.config-group input[type="number"] {
+    background: #333;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.diag-item label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--text-main);
+}
+
+.diag-item input {
+    width: 16px;
+    height: 16px;
+}
 
 
 /* Systems Grid (Right Column) */
@@ -161,7 +251,11 @@ header {
     padding: 15px;
     transition: transform 0.2s;
 }
-.system-card:hover { transform: translateY(-2px); border-color: #555; }
+
+.system-card:hover {
+    transform: translateY(-2px);
+    border-color: #555;
+}
 
 .system-card h3 {
     border-bottom: 2px solid #333;
@@ -179,17 +273,46 @@ header {
     font-size: 0.95em;
 }
 
-.metric-label { color: var(--text-muted); }
-.metric-value { font-weight: bold; }
+.metric-label {
+    color: var(--text-muted);
+}
+
+.metric-value {
+    font-weight: bold;
+}
 
 /* Utility Classes for Values */
-.val-ok { color: var(--accent-success); }
-.val-warn { color: var(--accent-warning); }
-.val-danger { color: var(--accent-danger); }
-.val-info { color: var(--accent-primary); }
+.val-ok {
+    color: var(--accent-success);
+}
+
+.val-warn {
+    color: var(--accent-warning);
+}
+
+.val-danger {
+    color: var(--accent-danger);
+}
+
+.val-info {
+    color: var(--accent-primary);
+}
 
 @media (max-width: 900px) {
-    .dashboard { grid-template-columns: 1fr; }
-    .visualization { grid-column: 1 / -1; height: 150px; min-height: auto; }
-    .systems-container { grid-column: 1 / -1; }
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .left-col {
+        grid-column: 1 / -1;
+    }
+
+    .visualization {
+        height: 150px;
+        min-height: auto;
+    }
+
+    .systems-container {
+        grid-column: 1 / -1;
+    }
 }

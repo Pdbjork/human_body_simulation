@@ -61,11 +61,16 @@ export class EndocrineSystem extends SystemAgent {
 
     process(dt) {
         // Insulin regulation
+        let insulinEffectiveness = 1.0;
+        if (globalState.activeConditions && globalState.activeConditions.has('diabetes_t2')) {
+            insulinEffectiveness = 0.3; // Insulin resistance
+        }
+
         if (globalState.insulin > 10) {
             // Degrade over time
             globalState.insulin -= 0.5;
-            // Insulin lowers glucose
-            globalState.glucose = Math.max(70, globalState.glucose - 1);
+            // Insulin lowers glucose (modulated by sensitivity)
+            globalState.glucose = Math.max(70, globalState.glucose - (1 * insulinEffectiveness));
         }
     }
 
