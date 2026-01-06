@@ -66,3 +66,20 @@ export const getEffectiveValue = (key, baseValue) => {
     }
     return val;
 };
+
+// Fetch Research Data (Knowledge Base)
+export const fetchKnowledge = async () => {
+    try {
+        const res = await fetch('/api/parameters');
+        if (res.ok) {
+            const data = await res.json();
+            console.log("Updated Knowledge from Research:", data);
+            globalState.modifiers.research = data;
+        }
+    } catch (e) {
+        console.warn("Server offline or unreachable. Using defaults.");
+    }
+};
+
+// Initial fetch
+fetchKnowledge();

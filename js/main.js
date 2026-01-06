@@ -145,6 +145,15 @@ class HumanSimulation {
                         statusText.textContent = `✅ Imported! RHR: ${data.restingHeartRate} | Avg Steps: ${data.averageSteps}`;
                         statusText.className = "status-text success";
 
+                        // Contribute to Hive Mind
+                        fetch('/api/contribute', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        }).then(res => res.json())
+                            .then(res => console.log("Contributed to Hive Mind:", res))
+                            .catch(e => console.warn("Could not contribute data:", e));
+
                     } catch (err) {
                         console.error(err);
                         statusText.textContent = "❌ Error parsing file.";
@@ -152,6 +161,28 @@ class HumanSimulation {
                     }
                 };
                 reader.readAsText(file);
+            };
+        }
+
+        // Research Update Button
+        const btnResearch = document.getElementById('btn-research');
+        const researchStatus = document.getElementById('knowledge-status');
+        if (btnResearch) {
+            btnResearch.onclick = () => {
+                researchStatus.textContent = "Scraping medical databases...";
+                researchStatus.className = "status-text";
+
+                fetch('/api/update-knowledge', { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        researchStatus.textContent = `✅ Knowledge Updated! (v${data.data.researchVersion})`;
+                        researchStatus.className = "status-text success";
+                        if (globalState.modifiers) globalState.modifiers.research = data.data;
+                    })
+                    .catch(e => {
+                        researchStatus.textContent = "❌ Server Error";
+                        researchStatus.className = "status-text error";
+                    });
             };
         }
     }
@@ -204,6 +235,8 @@ class HumanSimulation {
         }
     }
 }
+
+
 
 // Start app
 window.app = new HumanSimulation();

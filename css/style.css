@@ -167,6 +167,34 @@ header {
     box-shadow: 0 0 30px var(--accent-primary);
 }
 
+.full-width {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.small-text {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.status-text {
+    margin-top: 10px;
+    font-size: 0.9em;
+    font-style: italic;
+    min-height: 1.2em;
+}
+
+.status-text.success {
+    color: var(--accent-success);
+    font-style: normal;
+}
+
+.status-text.error {
+    color: var(--accent-danger);
+    font-style: normal;
+}
+
 .left-col {
     grid-column: 1 / 2;
     display: flex;
