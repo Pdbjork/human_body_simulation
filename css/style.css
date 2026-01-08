@@ -190,9 +190,36 @@ header {
     font-style: normal;
 }
 
-.status-text.error {
-    color: var(--accent-danger);
-    font-style: normal;
+color: var(--accent-danger);
+font-style: normal;
+}
+
+/* Avatar Styles */
+.avatar-container {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar-face svg {
+    display: block;
+}
+
+.avatar-bubble {
+    background: #333;
+    padding: 10px 15px;
+    border-radius: 15px;
+    border-bottom-left-radius: 2px;
+    font-size: 0.95em;
+    flex-grow: 1;
+    color: #fff;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
 }
 
 .left-col {

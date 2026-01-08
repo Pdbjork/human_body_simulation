@@ -49,6 +49,13 @@ export const UserProfile = {
     fitnessLevel: 1.0, // 1.0 = average, 1.5 = athlete
     sleepQuality: 1.0,  // 1.0 = good, 0.5 = poor
 
+    // Personality
+    personality: {
+        neuroticism: 0.5, // 0-1: reaction to stress
+        stoicism: 0.5,    // 0-1: suppression of symptoms
+        optimism: 0.5     // 0-1: recovery speed bias
+    },
+
     // Active diagnoses IDs
     diagnoses: new Set()
 };

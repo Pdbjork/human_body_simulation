@@ -43,6 +43,21 @@
             <!-- Visualization Area (Placeholder for generic body viz) -->
             <!-- Visualization (Left Column) -->
             <div class="left-col">
+                <section class="panel avatar-container">
+                    <div class="avatar-face" id="avatar-face">
+                        <!-- Simple SVG Face -->
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="45" fill="#333" stroke="#00bcd4" stroke-width="2" />
+                            <circle class="eye" cx="35" cy="40" r="5" fill="#fff" />
+                            <circle class="eye" cx="65" cy="40" r="5" fill="#fff" />
+                            <path class="mouth" d="M 30 70 Q 50 80 70 70" stroke="#fff" stroke-width="3" fill="none" />
+                        </svg>
+                    </div>
+                    <div class="avatar-bubble">
+                        <p id="avatar-msg">System Nominal. I am feeling calm.</p>
+                    </div>
+                </section>
+
                 <section class="panel visualization" id="body-viz">
                     <div class="anatomy-placeholder">
                         <div class="body-outline"></div>

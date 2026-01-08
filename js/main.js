@@ -3,7 +3,9 @@ import { NervousSystem, CirculatorySystem, RespiratorySystem } from './systems/c
 import { DigestiveSystem, EndocrineSystem, MusculoskeletalSystem } from './systems/metabolic_systems.js';
 import { ImmuneSystem, ExcretorySystem, BrainSystem } from './systems/defense_systems.js';
 import { Diagnoses, UserProfile } from './diagnoses.js';
+import { Diagnoses, UserProfile } from './diagnoses.js';
 import { HealthParser } from './health_parser.js';
+import './avatar.js'; // Initialize Avatar Bridge
 
 class HumanSimulation {
     constructor() {
