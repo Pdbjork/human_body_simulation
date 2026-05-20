@@ -48,6 +48,14 @@ export const globalState = {
     insulin: 10,
     glucagon: 0,
 
+    // NEW: Advanced system variables
+    toxinLevel: 0,         // 0-100 (accumulated metabolic waste)
+    inflammation: 0,       // 0-100 (immune response level)
+    hydrationLevel: 80,    // 0-100 (% hydration)
+    painLevel: 0,          // 0-100 (pain perception)
+    sexDrive: 50,          // 0-100 (libido)
+    lymphCount: 50,        // K/μL (immune cells)
+    
     // Calculated fields based on modifiers
     modifiers: {}
 };
