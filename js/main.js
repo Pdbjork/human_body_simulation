@@ -2,7 +2,7 @@ import { bus, globalState } from './state.js';
 import { NervousSystem, CirculatorySystem, RespiratorySystem } from './systems/core_systems.js';
 import { DigestiveSystem, EndocrineSystem, MusculoskeletalSystem } from './systems/metabolic_systems.js';
 import { ImmuneSystem, ExcretorySystem, BrainSystem } from './systems/defense_systems.js';
-import { Diagnoses, UserProfile } from './diagnoses.js';
+import { LymphaticSystem, SensorySystem, ThermoregulationSystem, SleepCircadianSystem, ReproductiveSystem } from './systems/advanced_systems.js';
 import { Diagnoses, UserProfile } from './diagnoses.js';
 import { HealthParser } from './health_parser.js';
 import './avatar.js'; // Initialize Avatar Bridge
@@ -17,7 +17,7 @@ class HumanSimulation {
     }
 
     init() {
-        // Instantiate all systems
+        // Instantiate CORE systems
         this.systems.push(new NervousSystem());
         this.systems.push(new CirculatorySystem());
         this.systems.push(new RespiratorySystem());
@@ -26,8 +26,14 @@ class HumanSimulation {
         this.systems.push(new MusculoskeletalSystem());
         this.systems.push(new ImmuneSystem());
         this.systems.push(new ExcretorySystem());
-        this.systems.push(new ExcretorySystem());
         this.systems.push(new BrainSystem());
+
+        // Instantiate NEW ADVANCED systems
+        this.systems.push(new LymphaticSystem());
+        this.systems.push(new SensorySystem());
+        this.systems.push(new ThermoregulationSystem());
+        this.systems.push(new SleepCircadianSystem());
+        this.systems.push(new ReproductiveSystem());
 
         // Link globally for debugging
         globalState.userProfile = UserProfile;
@@ -213,11 +219,14 @@ class HumanSimulation {
             document.getElementById('global-state').textContent = globalState.threatDetected ? 'STRESS RESPONSE' : 'Nominal';
             document.getElementById('global-state').className = globalState.threatDetected ? 'value val-danger' : 'value val-ok';
 
-            // Simple homeostasis score calc
+            // Enhanced homeostasis score calculation
             let score = 100;
             if (globalState.threatDetected) score -= 30;
             if (globalState.heartRate > 100) score -= 10;
             if (globalState.atp < 50) score -= 10;
+            if (globalState.inflammation > 50) score -= 15;
+            if (globalState.painLevel > 70) score -= 15;
+            if (globalState.hydrationLevel < 50) score -= 10;
 
             document.getElementById('homeostasis-score').textContent = Math.max(0, score) + '%';
             document.getElementById('sim-tick').textContent = Math.floor(timestamp / 1000);
