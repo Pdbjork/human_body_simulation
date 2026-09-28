@@ -1,0 +1,127 @@
+{
+  "name": "BjorkEd Body Lab",
+  "repository": "https://github.com/Pdbjork/human_body_simulation",
+  "verifiedAt": "2026-09-28T00:23:35.339Z",
+  "timezoneOffsetAtVerification": "-05:00",
+  "cadence": "Monday and Thursday; scheduler timezone currently UTC−05:00",
+  "notice": "Observed scheduled department jobs, not continuous live workers or completed clinical validation. Native iOS/Android integrations require their platform SDKs, user permissions and device validation; no store release is claimed.",
+  "departments": [
+    {
+      "id": "organ-research",
+      "name": "Organ Systems Research",
+      "jobId": "8f9e65ab6aca",
+      "status": "scheduled",
+      "schedule": "5 6 * * 1,4",
+      "mission": "Research body systems and organ interactions using NIH, NIDDK, MedlinePlus and peer-reviewed primary/review sources. Audit existing 14 systems and proposed liver/pancreas/kidney educational models. Identify a meaningful next organ/system, equations/units and evidence limitations; prevent double-counted physiology. Deliver a source-backed implementation brief with validation invariants; do not change model parameters just because new papers exist.",
+      "reports": "/root/reports/body-lab/organ-research"
+    },
+    {
+      "id": "wearables",
+      "name": "Wearable Integration",
+      "jobId": "cb6ac2e24db9",
+      "status": "scheduled",
+      "schedule": "15 6 * * 1,4",
+      "mission": "Own consent, Apple Health XML, FHIR Observations and wearable export personalization. Research real Apple HealthKit and Android Health Connect permissions/data types, device measurement limits, units, timestamps, deduplication and revocation. Plan then implement bounded importer improvements on synthetic fixtures only. Distinguish real native synchronization from file import; never infer diagnoses or fitness from step count.",
+      "reports": "/root/reports/body-lab/wearables"
+    },
+    {
+      "id": "sales",
+      "name": "Sales",
+      "jobId": "9ed8ebb2f2a6",
+      "status": "scheduled",
+      "schedule": "25 6 * * 1,4",
+      "mission": "Identify appropriate education/research/wellbeing customers, honest positioning and a consent-based sales validation plan. Produce approval-ready offer copy and interview questions. Never claim diagnostic accuracy, medical-device clearance, clinical outcomes or guaranteed benefits. No patient-data monetization, purchased leads, outbound sends or ad spend.",
+      "reports": "/root/reports/body-lab/sales"
+    },
+    {
+      "id": "ios",
+      "name": "iOS Engineering",
+      "jobId": "8ec9f17066a1",
+      "status": "scheduled",
+      "schedule": "35 6 * * 1,4",
+      "mission": "Own future native iOS implementation. Research current Apple HealthKit permissions, data minimization, foreground/background restrictions, export contracts, accessibility, privacy manifest and App Review rules for health apps. First deliver an implementable integration design and exact SDK/signing/test prerequisites. Subsequent code only when real toolchains permit an executable implementation in your isolated worktree; do not fabricate Xcode builds, HealthKit access, native sync or app-store release.",
+      "reports": "/root/reports/body-lab/ios"
+    },
+    {
+      "id": "android",
+      "name": "Android Engineering",
+      "jobId": "9107310dae56",
+      "status": "scheduled",
+      "schedule": "45 6 * * 1,4",
+      "mission": "Own future native Android implementation. Research current Health Connect availability, permissions and medical-data restrictions, Android lifecycle, import contracts, accessibility and Play health-app declaration. First deliver concrete integration design and exact Gradle/SDK/device/test prerequisites. Later isolated code must run real compatible tools; do not fabricate builds, Health Connect sync or Play publication.",
+      "reports": "/root/reports/body-lab/android"
+    },
+    {
+      "id": "web",
+      "name": "Web Engineering",
+      "jobId": "314752aad598",
+      "status": "scheduled",
+      "schedule": "55 6 * * 1,4",
+      "mission": "Own accessible, responsive web/PWA product integration and session-only data flow. Audit real workspaces, keyboard navigation, errors and personal-data deletion. Plan one meaningful improvement, then implement in an isolated worktree when the development checkout exists. Verify actual changed browser UI after work. No server-side personal-data persistence or telemetry. Coordinate feature code owners; no shared checkout edits.",
+      "reports": "/root/reports/body-lab/web"
+    },
+    {
+      "id": "art",
+      "name": "Art & Visualization",
+      "jobId": "b9ae852ec2b6",
+      "status": "scheduled",
+      "schedule": "5 7 * * 1,4",
+      "mission": "Create original medically reviewed educational anatomy and organ illustrations with accessible text equivalents and clear schematic-not-to-scale labels. No copied copyrighted anatomy plates or photorealism implying diagnostic accuracy. First supply art direction and one original safe SVG concept plus source-backed anatomical review checklist; no unsanitized SVG from outside sources.",
+      "reports": "/root/reports/body-lab/art"
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "jobId": "8b5c141eb8ea",
+      "status": "scheduled",
+      "schedule": "15 7 * * 1,4",
+      "mission": "Build age-appropriate adult educational organ lessons, explanations of model limitations and meaningful knowledge checks with source citations. Distinguish simulated physiology, measured wearables and reported symptoms. Avoid presenting toy hormone scales as clinical reference ranges. Produce one complete lesson and assessment with correct explanations and accessibility guidance.",
+      "reports": "/root/reports/body-lab/education"
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "jobId": "5ffb36d01d35",
+      "status": "scheduled",
+      "schedule": "25 7 * * 1,4",
+      "mission": "Prepare honest product unit economics and an explicit spending approval register: infrastructure, native toolchains/accounts, privacy/security review, qualified clinical review and support. Use verified vendor pricing with dates, ranges and missing facts. No invented revenue, customer counts, profitability or automated money movement. Do not purchase anything or access bank/patient data.",
+      "reports": "/root/reports/body-lab/finance"
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "jobId": "abda474bcfc7",
+      "status": "scheduled",
+      "schedule": "35 7 * * 1,4",
+      "mission": "Maintain an evidence register and prioritized research agenda for physiology, wearable reliability and digital health/mental wellbeing interventions. Prefer systematic reviews and primary authoritative guidance; separate population evidence from individual prediction. Flag retractions, conflicts and dated guidance. Produce reviewable evidence and clinical-validation gaps, never auto-change patient recommendations.",
+      "reports": "/root/reports/body-lab/research"
+    },
+    {
+      "id": "mental-health",
+      "name": "Mental Health",
+      "jobId": "f57dd1e69240",
+      "status": "scheduled",
+      "schedule": "45 7 * * 1,4",
+      "mission": "Own non-diagnostic wellbeing support, session-only check-ins, grounding, safe paced breathing and crisis routing. Research NIMH/NHS/988 and local/global help resources. No diagnosis from mood scores, emotion inference from wearables, coercive advice, therapy replacement or suicide prediction. Deliver one source-linked product improvement plus crisis/false-reassurance safety checks; no private journals accessed.",
+      "reports": "/root/reports/body-lab/mental-health"
+    },
+    {
+      "id": "clinical-safety",
+      "name": "Clinical Safety & Chat",
+      "jobId": "665495f7659b",
+      "status": "scheduled",
+      "schedule": "55 7 * * 1,4",
+      "mission": "Own symptom assistant safeguards, evidence-backed possible explanations, red-flag routing and personalized low-risk education. Review rule coverage, unknown-scope messages, negation limits, pediatric/pregnancy cautions, medication refusal and failure to rule out emergencies. Never diagnose from toy simulation or normal wearables. First provide concrete safety cases and critical acceptance checks; medical professional review remains a prerequisite for clinical claims.",
+      "reports": "/root/reports/body-lab/clinical-safety"
+    },
+    {
+      "id": "medical-imaging",
+      "name": "Medical Imaging",
+      "jobId": "bc0468b5c00a",
+      "status": "scheduled",
+      "schedule": "5 8 * * 1,4",
+      "mission": "Own local medical-image viewing and DICOM parsing safety. Research transfer syntax, pixel bounds/windowing, identifiers, decompression/resource risks and browser-memory deletion. Support actual image viewing without claiming radiology interpretation. First provide verified DICOM compatibility matrix, synthetic test cases and clear unsupported behavior; never read real patient studies or upload images to a provider.",
+      "reports": "/root/reports/body-lab/medical-imaging"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+#imaging-workspace .imaging-notice {
+    padding: 0.9rem;
+    border-left: 3px solid #58c6df;
+    background: rgba(88, 198, 223, 0.08);
+    line-height: 1.6;
+}
+#imaging-workspace .imaging-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin: 1rem 0;
+    line-height: 1.5;
+}
+#imaging-workspace .imaging-consent input {
+    flex: 0 0 auto;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.2rem;
+}
+#imaging-workspace .imaging-actions,
+#imaging-workspace .imaging-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 0.8rem 0;
+}
+#imaging-workspace .imaging-file-label,
+#imaging-workspace .imaging-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+    max-width: 100%;
+}
+#imaging-workspace input[type="file"] {
+    max-width: 100%;
+    width: min(100%, 25rem);
+}
+#imaging-workspace input[type="number"] {
+    width: 10rem;
+    max-width: 100%;
+}
+#imaging-workspace input[type="range"] {
+    width: 12rem;
+    max-width: 100%;
+}
+#imaging-workspace .imaging-small {
+    font-size: 0.85rem;
+    color: #bcc9d7;
+    line-height: 1.6;
+}
+#imaging-workspace .imaging-status {
+    padding: 0.8rem 0;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+#imaging-workspace .imaging-metadata {
+    display: grid;
+    grid-template-columns: minmax(7rem, auto) minmax(0, 1fr);
+    gap: 0.4rem 1rem;
+    padding: 1rem;
+    border: 1px solid #38485b;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+}
+#imaging-workspace .imaging-metadata dt { color: #bcc9d7; }
+#imaging-workspace .imaging-metadata dd { margin: 0; overflow-wrap: anywhere; }
+#imaging-workspace .imaging-viewport {
+    max-height: 32rem;
+    min-height: 8rem;
+    width: 100%;
+    overflow: auto;
+    padding: 0.7rem;
+    box-sizing: border-box;
+    background: #05080d;
+    border: 1px solid #465a70;
+    border-radius: 0.6rem;
+}
+#imaging-workspace canvas {
+    display: block;
+    max-width: none;
+    margin: 0 auto;
+    background: #0f1620;
+}
+#imaging-workspace .imaging-support {
+    margin-top: 1rem;
+    line-height: 1.6;
+}
+#imaging-workspace .imaging-support summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+#imaging-workspace [hidden] { display: none !important; }
+#imaging-workspace :focus-visible {
+    outline: 2px solid #80d9f2;
+    outline-offset: 3px;
+}
+@media (max-width: 520px) {
+    #imaging-workspace .imaging-metadata { grid-template-columns: 1fr; }
+    #imaging-workspace .imaging-metadata dd { margin-bottom: 0.4rem; }
+    #imaging-workspace .imaging-viewport { max-height: 24rem; }
+}

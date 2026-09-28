@@ -1,47 +1,82 @@
-# human_body_simulation
+# BjorkEd Body Lab
 
-A prototype simulation of the human body as a multi-agent system, where each major body system (nervous, circulatory, respiratory, digestive, endocrine, musculoskeletal, immune, excretory, and brain) is represented as an interconnected program. The simulation visualizes interactions and homeostasis in real time.
+An educational body-system simulation with private, session-only health learning workspaces. This is **not a clinically validated digital twin, diagnostic medical device, radiology workstation, or replacement for a clinician**. Simulated values are not measured health. Citations document educational sources, not clinical validation of this software.
 
-## Features
+## Run
 
-- Interactive web-based prototype ([prototype](prototype)) visualizing body systems and their states
-- Simulates stress response, digestion, rest, and recovery
-- Models physiological variables (heart rate, breathing rate, hormone levels, etc.)
-- Modular structure for each system with real-time updates
+Python 3.10+ and a modern browser are sufficient; no runtime packages or AI-provider credentials are required.
 
-## Getting Started
+```sh
+python3 server.py --port 4790
+# Open http://127.0.0.1:4790/
+```
 
-### Prerequisites
+The server binds to loopback by default. Serve the same allowlisted static assets over trusted HTTPS for a phone; browser file access and home-screen installation depend on browser support. The web manifest supports a standalone launch experience, **not native HealthKit/Health Connect synchronization or an App Store/Play release**. No service worker caches personal data. The former incomplete GKE deployment template was replaced with executable checks; no cloud deployment is claimed.
 
-- A modern web browser (Chrome, Firefox, Edge, Safari)
-- (Optional) [Docker](https://www.docker.com/) and [Google Cloud](https://cloud.google.com/) account for deployment
+## Workspaces
 
-### Running the Prototype Locally
+### Simulation and anatomy
 
-1. Open the [prototype](prototype) file in your browser to view and interact with the simulation.
+- Fourteen existing system agents plus distinct **pancreas, liver and kidney** agents, with visible cards and pause/resume controls.
+- Original, keyboard-accessible six-organ illustration, source-linked lessons and knowledge checks.
+- Pancreas owns insulin/glucagon signals, liver owns its glycogen store and a separate urea production pool, kidneys clear that urea pool. Endocrine retains peripheral glucose uptake; Excretory displays renal state rather than removing it twice.
+- Equations, ownership and omissions are documented inside Anatomy & education. These are hand-chosen toy dynamics, **not research-fitted human physiology**. Arbitrary-unit pools and a 1:1 illustrative glycogen/glucose mapping are not clinical concentrations or physical mass conversion.
+- Scenario condition switches are hypothetical configuration, not diagnoses inferred about the user. The homeostasis index is a toy score, not a health assessment.
 
-### Project Structure
+### Wearables and personal health
 
-- [`prototype`](prototype): Main HTML/JS/CSS file for the simulation UI and logic
-- [README.md](README.md): Project overview and instructions
-- [.github/workflows/google.yml](.github/workflows/google.yml): GitHub Actions workflow for building and deploying to Google Kubernetes Engine (GKE)
+Consent → local validation → preview → explicit apply. The applied resting pulse becomes the educational baseline; step count never determines a fitness label. Other supported measurements are available to the assistant only with a separate opt-in.
 
-### Deployment
+Supported imports:
 
-This project includes a GitHub Actions workflow ([.github/workflows/google.yml](.github/workflows/google.yml)) for building a Docker container and deploying to Google Kubernetes Engine. See comments in the workflow file for setup instructions.
+- **Apple Health XML**: select the unzipped `export.xml`. Resting heart rate, steps, supported asleep categories and oxygen saturation. HealthKit percent samples use fractions (`0.98` means 98%).
+- **Defined CSV**, with exact header `metric,value,unit,start,end`. Metrics are `restingHeartRate`, `averageSteps`, `sleepHours`, `oxygenSaturation`; units and timezone-aware date rules are documented in the UI. CSV percentage values use 0–100.
+- **FHIR Observation or Bundle JSON** with the documented recognized codes, units, timestamps and one subject. Unsupported codes are not guessed into known metrics.
+- Manual measurements use the same validation and preview flow. Unknown values remain unknown, not zero.
 
-## Usage
+Limits: 12 MiB/file and 100,000 records. Latest resting pulse/oxygen samples are used, not a clinically measured long-term baseline. Steps/sleep are averaged over observed UTC days across the file; missing days are not zero. Exact duplicates are removed; conflicting/overlapping samples, mixed FHIR subjects, invalid units and impossible values are rejected. The UI reports provenance and stale-data limitations. Native watch/account pairing requires future platform SDK, permission and device validation by the native departments.
 
-- **Detect Threat (Fight-or-Flight):** Simulates a stress response across all systems
-- **Ingest Food:** Triggers digestion and nutrient absorption
-- **Rest & Recover:** Returns the system to a resting state
+### Personalized health assistant
 
-Observe how each system responds to different scenarios in real time.
+A transparent **offline, fixed-rule English-language conversational assistant**, not a hidden cloud LLM. It covers heart/breathing, fatigue/sleep, headache, digestive symptoms, exercise/wearables and stress/mood. It gathers duration, severity, progression and relevant context; offers possible explanations and low-risk education; and routes uncertainty and concerning symptoms to professional care.
 
-## Contributing
+Medical emergencies and self-harm concerns take precedence. Normal wearable readings never override concerning symptoms. The assistant cannot rule out emergencies, make confirmed diagnoses, prescribe or change medication/oxygen, interpret scans, monitor someone, or summon help. It is not comprehensive screening; phrase recognition and negation are limited. Pediatric, pregnancy and serious-condition contexts need clinician review. The interface exposes sources and limitations. A diagnostic product requires qualified clinical validation and appropriate regulatory, security and privacy review; none is implied by this app.
 
-Pull requests and suggestions are welcome! Please open an issue to discuss changes or ideas.
+### Medical images
 
-## License
+Files are selected into browser memory, **not uploaded to a server**. View/delete PNG and JPEG images, or supported **DICOM Part 10**, with zoom and contrast controls.
 
-[MIT](LICENSE)
+DICOM support: single-frame, 8/16-bit MONOCHROME1/2, Implicit/Explicit VR Little Endian; signed/stored bits, rescale and LINEAR windowing. Maximum 32 MiB/file, 4096 pixels/side and 8,388,608 pixels. Unsupported compressed/encapsulated/deflated/Big Endian, multiframe, color/palette, floating point, LUT/nonlinear presentation and raw non-Part-10 studies are rejected explicitly. Animated PNG is unsupported.
+
+No disease detection, radiology interpretation, orientation correction or calibrated clinical measurement. Patient tags/filenames are not listed, but identifiers burned into pixels can still be visible. Deletion releases/zeros retained buffers and canvases; JavaScript cannot promise secure erasure of browser/OS copies or original files.
+
+### Mental wellbeing
+
+Optional consented mood/stress/sleep check-ins and a session journal, individual deletion, self-paced sensory grounding and a stoppable gentle breathing exercise. Exercises stop when leaving the workspace or hiding the tab. Check-ins are unscored self-reports, **not diagnoses or crisis monitoring**. Crisis resources include local emergency guidance, US 988, Samaritans and country-based support. Breathing exercises are not for acute breathing difficulty.
+
+### Development departments
+
+Thirteen real recurring Hermes jobs were configured on the owner's VPS: Organ Systems Research, Wearable Integration, Sales, iOS Engineering, Android Engineering, Web Engineering, Art & Visualization, Education, Finance, Research, Mental Health, Clinical Safety & Chat, and Medical Imaging.
+
+`data/departments.json` is a timestamped **deployment snapshot**, not live worker status. The Departments workspace shows actual configured job IDs, missions and Monday/Thursday schedules (scheduler timezone, UTC−05:00 when configured). Reports live under `/root/reports/body-lab/<department>/` on that private VPS, not in this public app. The Business Village also observes the jobs in its Body Lab room. These agents research and develop the product with synthetic data; they have no access or authority to process user health records. Native teams are deployed, but no native build, device integration, signing or store publication is claimed.
+
+## Privacy and security
+
+- Consent is off by default; imported summaries, chat, image data and wellbeing entries stay in the current page's memory. No cloud AI calls, analytics, IndexedDB or local/session storage for health data.
+- **Clear all personal data**, consent withdrawal, local clear and page exit erase relevant app-held state. Reloading loses the session. External source links only open when deliberately selected; their sites have separate privacy policies.
+- The local server serves allowlisted assets, denies private/repository files and all POST/PUT/PATCH/DELETE health routes, uses `no-store`, and restricts network connections through CSP. It is not a multi-user healthcare backend.
+- Browser extensions, keyboard services, OS memory, screenshots and shared devices remain outside the app's guarantees. Do not use someone else's medical records without authorization. No HIPAA/GDPR compliance certification is claimed.
+- The legacy health-aggregate upload, randomly mutated “research” parameters, their demo data and the obsolete standalone `prototype` entrypoint were removed. Reviewed source/code updates replace synthetic research claims.
+
+## Verification
+
+Node.js 22+ is needed only for behavior tests:
+
+```sh
+npm test
+python3 -m unittest discover -s tests -p 'test_*.py'
+```
+
+The suites cover importer boundaries, organ transfer invariants, symptom escalation/uncertainty, DICOM parsing/rendering and HTTP privacy boundaries. Synthetic fixtures are used; no real patient data is required.
+
+Integrated Chromium checks exercised Apple XML import/preview/apply, baseline personalization, educational quiz feedback, organ response to food, emergency precedence despite normal wearable values, DICOM pixel rendering, wellbeing check-ins, stopped exercises, cross-workspace consent/data clearing, department cards and 390px layouts. This is engineering verification, not clinical validation or native iOS/Android device testing.

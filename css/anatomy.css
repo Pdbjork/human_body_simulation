@@ -1,0 +1,59 @@
+#anatomy-workspace { scroll-margin-top: 1rem; }
+#anatomy-workspace .anatomy-intro { max-width: 85ch; }
+.anatomy-layout { display: grid; grid-template-columns: minmax(230px, 0.85fr) minmax(280px, 1.3fr); gap: 1.5rem; align-items: start; }
+.anatomy-map { margin: 0; padding: 1rem; border: 1px solid #41546a; border-radius: 14px; background: #101d2d; color: #e6edf5; }
+.anatomy-figure { display: block; width: 100%; max-height: 470px; }
+.anatomy-body { fill: #26394b; stroke: #7890a6; stroke-width: 2; }
+.anatomy-airway { fill: none; stroke: #cad9e7; stroke-width: 5; }
+.anatomy-figure [data-organ] { cursor: pointer; stroke: #f1f5f9; stroke-width: 1.5; outline: none; }
+.anatomy-figure [data-organ="heart"] { fill: #d85468; }
+.anatomy-figure [data-organ="lungs"] { fill: #75abc4; }
+.anatomy-figure [data-organ="liver"] { fill: #b27683; }
+.anatomy-figure [data-organ="pancreas"] { fill: #e5b766; }
+.anatomy-figure [data-organ="kidneys"] { fill: #b590d7; }
+.anatomy-figure [data-organ="intestine"] { fill: #86b5a1; }
+.anatomy-figure [data-organ]:hover, .anatomy-figure [data-organ]:focus-visible, .anatomy-figure [data-organ][aria-pressed="true"] { stroke: #fff1a6; stroke-width: 4; }
+.anatomy-figure text { fill: #09111c; stroke: none; font: 700 15px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.anatomy-figure .anatomy-orientation { fill: #d1deec; font-size: 11px; font-weight: 400; }
+.anatomy-figure .anatomy-fold { fill: none; stroke: #365b51; stroke-width: 2; }
+.anatomy-map figcaption { font-size: 0.85rem; line-height: 1.5; color: #d1deec; }
+.anatomy-organ-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; }
+#anatomy-workspace button { white-space: normal; min-height: 44px; }
+.anatomy-organ-buttons button { background: #22354b; color: #f1f5fa; border: 1px solid #7c94ad; padding: 0.6rem; border-radius: 7px; }
+.anatomy-organ-buttons button[aria-pressed="true"] { border-color: #fff1a6; background: #3d4857; box-shadow: inset 0 0 0 1px #fff1a6; }
+#anatomy-workspace button:focus-visible, #anatomy-workspace a:focus-visible, #anatomy-workspace summary:focus-visible { outline: 3px solid #f5ce74; outline-offset: 3px; }
+.anatomy-detail { min-width: 0; }
+.anatomy-detail h3 { margin-top: 0.2rem; }
+.anatomy-detail h4 { margin: 1.1rem 0 0.4rem; }
+.anatomy-detail p { line-height: 1.65; }
+.anatomy-eyebrow { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.03em; }
+.anatomy-selection { font-size: 0.85rem; margin: 0.75rem 0; }
+.anatomy-sources { padding-left: 1.2rem; }
+.anatomy-sources li { margin-bottom: 0.55rem; }
+.anatomy-sources small { display: block; font-size: 0.78rem; line-height: 1.5; opacity: 0.9; }
+.anatomy-sources a { overflow-wrap: anywhere; }
+.anatomy-quiz { padding: 1rem; border: 1px solid #61748a; border-radius: 10px; margin-top: 1rem; }
+.anatomy-quiz fieldset { border: 0; padding: 0; margin: 0 0 0.7rem; min-width: 0; }
+.anatomy-quiz legend { font-weight: 600; margin-bottom: 0.6rem; }
+.anatomy-quiz label { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.5rem 0; cursor: pointer; line-height: 1.5; }
+.anatomy-quiz input[type="radio"] { width: auto; flex: 0 0 auto; accent-color: #55c4bd; }
+.anatomy-feedback:empty { display: none; }
+.anatomy-feedback { border-left: 3px solid #7ed7c8; padding-left: 0.7rem; }
+.anatomy-model-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; margin: 1rem 0; }
+.anatomy-model-card { min-width: 0; padding: 1rem; border: 1px solid #52697e; border-radius: 10px; }
+.anatomy-model-card h3 { margin-top: 0; }
+.anatomy-model-card .metric-row { display: flex; flex-direction: column; align-items: start; gap: 0.2rem; margin-top: 0.65rem; }
+.anatomy-model-card .metric-value { font-size: 0.9rem; overflow-wrap: anywhere; }
+.anatomy-assumptions { margin-top: 1rem; border-top: 1px solid #52697e; padding-top: 1rem; }
+.anatomy-assumptions summary { cursor: pointer; font-weight: 600; min-height: 44px; }
+.anatomy-assumptions li { margin: 0.7rem 0; line-height: 1.65; }
+.anatomy-audit { display: grid; grid-template-columns: minmax(120px, 0.4fr) 1fr; gap: 0.65rem 1rem; font-size: 0.9rem; }
+.anatomy-audit dt { font-weight: 600; }
+.anatomy-audit dd { margin: 0; line-height: 1.5; }
+@media (max-width: 760px) {
+    .anatomy-layout { grid-template-columns: 1fr; }
+    .anatomy-figure { max-height: 390px; }
+    .anatomy-model-cards { grid-template-columns: 1fr; }
+    .anatomy-audit { grid-template-columns: 1fr; gap: 0.3rem; }
+    .anatomy-audit dd { margin-bottom: 0.6rem; }
+}
