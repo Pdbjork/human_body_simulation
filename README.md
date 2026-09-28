@@ -20,13 +20,36 @@ To modify the anatomical renderer, use Node.js 22+, run `npm ci`, then `npm run 
 ### Simulation and anatomy
 
 - Fourteen existing system agents plus distinct **pancreas, liver and kidney** agents, with visible cards and pause/resume controls.
-- **3D body & anatomy** replaces the flat diagram with an original proportioned, continuous skin surface, shaded organs and an illustrative skeleton. Rotate by dragging or arrow keys; zoom by wheel/pinch or buttons; use Front, Back, Side and Reset camera controls.
-- Switch between body surface, internal organs, skeleton, combined layers and **Selected organ only** to inspect deep organs without overlap. Clicking the heart, lungs, liver, pancreas, kidneys or small intestine highlights it and opens its source-linked lesson and quiz. Equivalent labeled buttons support keyboard selection.
-- The skin is generated once by a smooth-union isosurface; drawing occurs on camera, selection and size changes rather than an idle animation loop. Geometry and lighting are local and deterministic; no uploaded images or health measurements are used to construct the body.
-- Adult-like proportions, tissue colors, lobes, bronchi, large vessels, bowel loops and skeletal landmarks are illustrative, not scan-derived. The model omits fine anatomy, anatomical variation, sex-specific anatomy, many vessels/nerves, calibrated dimensions and physiological motion. It is not a complete anatomical atlas or patient-specific model.
+- **3D body & anatomy** uses licensed **BodyParts3D reference meshes**, replacing the former ellipsoid mannequin and generated skin. The asset contains 1,179 source anatomical components: skin, whole/segmented muscles and tendons, bones, brain, visceral organs and vascular/airway structures. Detailed facial contours, hands, feet, muscle boundaries and organ surfaces come from the dataset, not invented primitive geometry.
+- Switch between **musculature**, body surface, internal organs, skeleton, combined layers and **Selected organ only**. Organ buttons isolate and frame the real heart, lungs, liver, pancreas, kidneys or small intestine and open the corresponding lesson/quiz. Clicking an organ in the contextual view selects it without losing that view. Drag or use arrow keys to rotate; wheel/pinch or +/− to zoom; camera buttons and Home/Reset restore framing.
+- The default three-quarter muscular view includes the underlying skeleton. Rough tissue materials, studio environment lighting and ground shadows make contours legible. Rendering is event-driven, not an idle animation loop. The local ~37 MB GLB loads only when the anatomy workspace is opened; it makes no runtime dataset/CDN requests and is not constructed from personal measurements or uploaded scans.
+- This is an **adult male reference**, including external anatomy in the surface layer, not a personalized or population-representative body. Colors, lighting and selection highlights are illustrative. Display scale and simplifier error are not clinical measurements. The selected/optimized meshes omit structures and individual variation; there is no physiological motion or clinical validation.
 - Pancreas owns insulin/glucagon signals, liver owns its glycogen store and a separate urea production pool, kidneys clear that urea pool. Endocrine retains peripheral glucose uptake; Excretory displays renal state rather than removing it twice.
 - Equations, ownership and omissions are documented inside 3D body & anatomy. These are hand-chosen toy dynamics, **not research-fitted human physiology**. Arbitrary-unit pools and a 1:1 illustrative glycogen/glucose mapping are not clinical concentrations or physical mass conversion.
 - Scenario condition switches are hypothetical configuration, not diagnoses inferred about the user. The homeostasis index is a toy score, not a health assessment.
+
+#### Anatomical asset provenance and rebuilding
+
+**BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International.** See the [official dataset](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/desc.html), [current publisher license](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html) and [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The publisher changed the license in February 2025; older OBJ file comments retain the previous CC-BY-SA-2.1-JP text.
+
+The geometry uses release 4.0 plus the five original release 3.0 pulmonary lobe surfaces: the 4.0 PART-OF lung hierarchy otherwise supplies airways/vessels without the enclosing lobes. Both retain their source coordinate relationship; no invented lung shell is substituted. `assets/anatomy/credits.json` records source URLs, input/per-lobe hashes, component identifiers, modifications and the final asset hash.
+
+Source geometry is coordinate-normalized, colored, batched and simplified offline with locked mesh boundaries. About 3.92 million original triangles become 1.20 million rendered triangles in 22 batches. This reduces transfer/GPU cost without substituting the former procedural body; the simplifier's numerical error is **not an anatomical accuracy guarantee**.
+
+To regenerate the committed asset, download `isa_BP3D_4.0_obj_99.zip`, `partof_element_parts.txt` and `isa_element_parts.txt` from the [official current archive](https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/), and `BodyParts3D_3.0_obj_99.zip` from the [official 3.0 archive](https://dbarchive.biosciencedbc.jp/data/bodyparts3d/20110915/). After `npm ci`:
+
+```sh
+python3 build-anatomy.py \
+  --archive /path/to/isa_BP3D_4.0_obj_99.zip \
+  --partof /path/to/partof_element_parts.txt \
+  --isa /path/to/isa_element_parts.txt \
+  --lung-archive /path/to/BodyParts3D_3.0_obj_99.zip
+node optimize-anatomy.mjs
+npm run build
+```
+
+The lung input may instead be a ZIP containing the five unmodified original entries FMA7333, FMA7337, FMA7370, FMA7371 and FMA7383. Optimization uses pinned meshoptimizer only during development; no WASM decoder or relaxed browser CSP is needed. Commit the GLB, provenance JSON and renderer bundle. The old procedural body/surface generator has been removed.
+
 
 ### Wearables and personal health
 
@@ -86,4 +109,4 @@ The suites cover importer boundaries, organ transfer invariants, symptom escalat
 
 Integrated Chromium checks exercised Apple XML import/preview/apply, baseline personalization, educational quiz feedback, organ response to food, emergency precedence despite normal wearable values, DICOM pixel rendering, wellbeing check-ins, stopped exercises, cross-workspace consent/data clearing, department cards and 390px layouts. This is engineering verification, not clinical validation or native iOS/Android device testing.
 
-The 3D viewer was also checked in Chromium for actual organ raycast selection, linked lessons, surface/skeleton/combined/isolated layers, camera presets and zoom, keyboard rotation, reset, mobile layout and absence of external network requests. Visual realism does not establish anatomical or clinical validation.
+The reference-mesh viewer was checked in Chromium for all six isolated lessons, contextual lung raycast selection, surface/muscular/skeletal/combined layers, camera presets/zoom, keyboard rotation/reset, 390px layout and absence of external requests. Opening the simulation alone does not fetch the GLB. The HTTP regression suite verifies that the exact public asset is served without exposing arbitrary medical-model files. Visual realism does not establish clinical validation.

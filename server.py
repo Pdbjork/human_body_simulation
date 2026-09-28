@@ -14,7 +14,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
-EXACT = {"index.html", "manifest.webmanifest", "data/departments.json"}
+EXACT = {"index.html", "manifest.webmanifest", "data/departments.json", "assets/anatomy/body.glb", "assets/anatomy/credits.json"}
 DIRECTORIES = {"js": {".js"}, "css": {".css"}, "assets": {".svg", ".png", ".jpg", ".webp", ".ico"}}
 
 
@@ -52,6 +52,8 @@ class BodySimHandler(BaseHTTPRequestHandler):
         content_type = mimetypes.guess_type(resolved.name)[0] or "application/octet-stream"
         if resolved.suffix == ".js":
             content_type = "text/javascript"
+        elif resolved.suffix == ".glb":
+            content_type = "model/gltf-binary"
         self.respond(200, resolved.read_bytes(), content_type, head)
 
     def do_GET(self):

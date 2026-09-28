@@ -19,7 +19,13 @@ export function mountAnatomyWorkspace(container) {
     const modelHost = element('div');
     figure.append(modelHost);
     const model = mountBodyModel(modelHost, id => selectOrgan(id));
-    figure.append(element('figcaption', 'Original 3D illustration with adult-like proportions and approximate organ positions. Anatomy varies; surfaces, tissue colors and skeletal detail are simplified. Not a scan, sex-specific atlas, or clinically validated model.'));
+    const caption = element('figcaption', 'Adult male reference anatomy from BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International. Meshes selected, coordinate-normalized, colored and converted for this viewer. Reference anatomy—not your body, a diagnostic scan, or a clinically validated simulation. ');
+    const attribution = element('a', 'Dataset, license & modifications');
+    attribution.href = 'assets/anatomy/credits.json';
+    attribution.target = '_blank';
+    attribution.rel = 'noopener noreferrer';
+    caption.append(attribution);
+    figure.append(caption);
     const navigation = element('div', undefined, 'anatomy-organ-buttons');
     navigation.setAttribute('aria-label', 'Choose an organ');
     const buttons = organs.map((organ, index) => {

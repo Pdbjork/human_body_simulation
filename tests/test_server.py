@@ -22,6 +22,11 @@ class PrivacyServerTests(unittest.TestCase):
         (root / '.git').mkdir()
         (root / '.git' / 'config').write_text('synthetic-secret')
         (root / 'js' / 'private.js').symlink_to(root / '.git' / 'config')
+        anatomy = root / 'assets' / 'anatomy'
+        anatomy.mkdir(parents=True)
+        (anatomy / 'body.glb').write_bytes(b'glTF')
+        (anatomy / 'patient.glb').write_bytes(b'private-synthetic')
+        (anatomy / 'credits.json').write_text('{"license":"CC-BY-4.0"}')
         self.patch = patch('server.ROOT', root)
         self.patch.start()
         self.server = ThreadingHTTPServer(('127.0.0.1', 0), BodySimHandler)
@@ -63,6 +68,13 @@ class PrivacyServerTests(unittest.TestCase):
         self.assertIn("connect-src 'self'", headers['Content-Security-Policy'])
         self.assertIn("object-src 'none'", headers['Content-Security-Policy'])
         self.assertEqual(headers['Referrer-Policy'], 'no-referrer')
+
+    def test_model_allowlist_does_not_expose_other_medical_models(self):
+        status, headers, _ = self.request('GET', '/assets/anatomy/body.glb')
+        self.assertEqual(status, 200)
+        self.assertEqual(headers['Content-Type'], 'model/gltf-binary')
+        self.assertEqual(self.request('GET', '/assets/anatomy/credits.json')[0], 200)
+        self.assertEqual(self.request('GET', '/assets/anatomy/patient.glb')[0], 404)
 
 
 if __name__ == '__main__':
