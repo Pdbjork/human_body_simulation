@@ -4,7 +4,7 @@ An educational body-system simulation with private, session-only health learning
 
 ## Run
 
-Python 3.10+ and a modern browser are sufficient; no runtime packages or AI-provider credentials are required.
+Python 3.10+ and a modern browser are sufficient to run the committed app; no package installation or AI-provider credentials are required. The 3D viewer requires WebGL2. If it is unavailable, the app explicitly reports that limitation and the accessible organ lessons remain usable.
 
 ```sh
 python3 server.py --port 4790
@@ -13,14 +13,19 @@ python3 server.py --port 4790
 
 The server binds to loopback by default. Serve the same allowlisted static assets over trusted HTTPS for a phone; browser file access and home-screen installation depend on browser support. The web manifest supports a standalone launch experience, **not native HealthKit/Health Connect synchronization or an App Store/Play release**. No service worker caches personal data. The former incomplete GKE deployment template was replaced with executable checks; no cloud deployment is claimed.
 
+To modify the anatomical renderer, use Node.js 22+, run `npm ci`, then `npm run build`. Commit the generated `js/body-model.bundle.js` alongside its sources. The bundle includes pinned three.js and its MIT license; no runtime CDN requests are made. CI rebuilds it before running the behavior suites.
+
 ## Workspaces
 
 ### Simulation and anatomy
 
 - Fourteen existing system agents plus distinct **pancreas, liver and kidney** agents, with visible cards and pause/resume controls.
-- Original, keyboard-accessible six-organ illustration, source-linked lessons and knowledge checks.
+- **3D body & anatomy** replaces the flat diagram with an original proportioned, continuous skin surface, shaded organs and an illustrative skeleton. Rotate by dragging or arrow keys; zoom by wheel/pinch or buttons; use Front, Back, Side and Reset camera controls.
+- Switch between body surface, internal organs, skeleton, combined layers and **Selected organ only** to inspect deep organs without overlap. Clicking the heart, lungs, liver, pancreas, kidneys or small intestine highlights it and opens its source-linked lesson and quiz. Equivalent labeled buttons support keyboard selection.
+- The skin is generated once by a smooth-union isosurface; drawing occurs on camera, selection and size changes rather than an idle animation loop. Geometry and lighting are local and deterministic; no uploaded images or health measurements are used to construct the body.
+- Adult-like proportions, tissue colors, lobes, bronchi, large vessels, bowel loops and skeletal landmarks are illustrative, not scan-derived. The model omits fine anatomy, anatomical variation, sex-specific anatomy, many vessels/nerves, calibrated dimensions and physiological motion. It is not a complete anatomical atlas or patient-specific model.
 - Pancreas owns insulin/glucagon signals, liver owns its glycogen store and a separate urea production pool, kidneys clear that urea pool. Endocrine retains peripheral glucose uptake; Excretory displays renal state rather than removing it twice.
-- Equations, ownership and omissions are documented inside Anatomy & education. These are hand-chosen toy dynamics, **not research-fitted human physiology**. Arbitrary-unit pools and a 1:1 illustrative glycogen/glucose mapping are not clinical concentrations or physical mass conversion.
+- Equations, ownership and omissions are documented inside 3D body & anatomy. These are hand-chosen toy dynamics, **not research-fitted human physiology**. Arbitrary-unit pools and a 1:1 illustrative glycogen/glucose mapping are not clinical concentrations or physical mass conversion.
 - Scenario condition switches are hypothetical configuration, not diagnoses inferred about the user. The homeostasis index is a toy score, not a health assessment.
 
 ### Wearables and personal health
@@ -70,7 +75,7 @@ Thirteen real recurring Hermes jobs were configured on the owner's VPS: Organ Sy
 
 ## Verification
 
-Node.js 22+ is needed only for behavior tests:
+Node.js 22+ runs the behavior tests and renderer build; Python runs the HTTP boundary checks:
 
 ```sh
 npm test
@@ -80,3 +85,5 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 The suites cover importer boundaries, organ transfer invariants, symptom escalation/uncertainty, DICOM parsing/rendering and HTTP privacy boundaries. Synthetic fixtures are used; no real patient data is required.
 
 Integrated Chromium checks exercised Apple XML import/preview/apply, baseline personalization, educational quiz feedback, organ response to food, emergency precedence despite normal wearable values, DICOM pixel rendering, wellbeing check-ins, stopped exercises, cross-workspace consent/data clearing, department cards and 390px layouts. This is engineering verification, not clinical validation or native iOS/Android device testing.
+
+The 3D viewer was also checked in Chromium for actual organ raycast selection, linked lessons, surface/skeleton/combined/isolated layers, camera presets and zoom, keyboard rotation, reset, mobile layout and absence of external network requests. Visual realism does not establish anatomical or clinical validation.

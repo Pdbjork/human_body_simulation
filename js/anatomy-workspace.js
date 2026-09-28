@@ -1,39 +1,7 @@
 import { organs, anatomySources, evidenceReviewedAt, existingSystemAudit } from './anatomy-data.js';
 export { createOrganSystems } from './systems/organ_systems.js';
 
-// Original schematic drawn for this project; not copied from source illustrations.
-const illustration = `<svg class="anatomy-figure" viewBox="0 0 360 490" role="group" aria-labelledby="anatomy-art-title anatomy-art-description">
-    <title id="anatomy-art-title">Explore six organs</title>
-    <desc id="anatomy-art-description">Original front-view schematic, not to scale. Your right appears on the viewer's left. Kidneys and pancreas are shown through overlying structures. Select an organ using its shape or the labeled buttons.</desc>
-    <path class="anatomy-body" d="M151 21 Q180 7 209 21 Q229 40 217 72 L209 92 Q247 95 263 126 L295 258 Q298 277 282 281 Q268 285 260 261 L236 180 L235 304 L217 463 Q215 482 197 478 L182 328 L178 328 L163 478 Q145 482 143 463 L125 304 L124 180 L100 261 Q92 285 78 281 Q62 277 65 258 L97 126 Q113 95 151 92 L143 72 Q131 40 151 21 Z"/>
-    <path class="anatomy-airway" d="M180 94 V126 M180 126 L155 149 M180 126 L205 149"/>
-    <g data-organ="lungs" role="button" tabindex="0" aria-label="Explore lungs" aria-pressed="false">
-        <path d="M165 127 Q129 127 123 178 Q119 207 155 206 L173 192 L173 137 Z M195 127 Q231 127 237 178 Q241 207 208 206 L187 192 L187 137 Z"/>
-        <text x="145" y="171">2</text>
-    </g>
-    <g data-organ="heart" role="button" tabindex="0" aria-label="Explore heart" aria-pressed="false">
-        <path d="M179 171 Q176 151 190 151 Q201 152 204 164 Q219 157 224 175 Q227 196 200 217 Q177 195 179 171 Z"/>
-        <text x="201" y="185">1</text>
-    </g>
-    <g data-organ="liver" role="button" tabindex="0" aria-label="Explore liver" aria-pressed="false">
-        <path d="M126 215 Q149 204 181 215 L218 224 Q199 247 169 246 L131 257 Q118 244 126 215 Z"/>
-        <text x="148" y="236">3</text>
-    </g>
-    <g data-organ="kidneys" role="button" tabindex="0" aria-label="Explore kidneys" aria-pressed="false">
-        <path d="M135 258 Q115 257 116 282 Q118 307 136 304 Q150 298 138 286 Q133 280 142 273 Q147 266 135 258 Z M225 258 Q245 257 244 282 Q242 307 224 304 Q210 298 222 286 Q227 280 218 273 Q213 266 225 258 Z"/>
-        <text x="127" y="283">5</text><text x="233" y="283">5</text>
-    </g>
-    <g data-organ="pancreas" role="button" tabindex="0" aria-label="Explore pancreas" aria-pressed="false">
-        <path d="M151 260 Q175 247 218 249 Q231 253 218 263 L168 277 Q149 283 151 260 Z"/>
-        <text x="184" y="263">4</text>
-    </g>
-    <g data-organ="intestine" role="button" tabindex="0" aria-label="Explore small intestine" aria-pressed="false">
-        <path d="M152 292 Q168 284 180 293 Q192 283 208 294 L210 335 Q196 347 181 335 Q168 348 150 335 Z"/>
-        <path class="anatomy-fold" d="M160 300 Q199 292 199 305 Q154 305 160 315 Q202 310 199 325 Q177 331 160 326"/>
-        <text x="182" y="314">6</text>
-    </g>
-    <text class="anatomy-orientation" x="78" y="410">Body right</text><text class="anatomy-orientation" x="273" y="410">Body left</text>
-</svg>`;
+import { mountBodyModel } from './body-model.bundle.js';
 
 function element(tag, text, className) {
     const node = document.createElement(tag);
@@ -48,8 +16,10 @@ export function mountAnatomyWorkspace(container) {
     container.append(element('p', 'Explore how organs cooperate, then check your understanding. These are educational, unvalidated models—not a diagnosis, a digital twin, or a prediction of your health.', 'anatomy-intro'));
     const layout = element('div', undefined, 'anatomy-layout');
     const figure = element('figure', undefined, 'anatomy-map');
-    figure.innerHTML = illustration;
-    figure.append(element('figcaption', 'Original front-view schematic. Not to scale; overlapping organs are separated for learning.'));
+    const modelHost = element('div');
+    figure.append(modelHost);
+    const model = mountBodyModel(modelHost, id => selectOrgan(id));
+    figure.append(element('figcaption', 'Original 3D illustration with adult-like proportions and approximate organ positions. Anatomy varies; surfaces, tissue colors and skeletal detail are simplified. Not a scan, sex-specific atlas, or clinically validated model.'));
     const navigation = element('div', undefined, 'anatomy-organ-buttons');
     navigation.setAttribute('aria-label', 'Choose an organ');
     const buttons = organs.map((organ, index) => {
@@ -71,9 +41,10 @@ export function mountAnatomyWorkspace(container) {
     function selectOrgan(id) {
         const organ = organs.find(item => item.id === id);
         if (!organ) return;
-        for (const target of [...buttons, ...figure.querySelectorAll('svg [data-organ]')]) {
+        for (const target of buttons) {
             target.setAttribute('aria-pressed', String(target.dataset.organ === id));
         }
+        model.select(id);
         detail.replaceChildren(element('p', organ.system, 'anatomy-eyebrow'), element('h3', organ.name));
         for (const [heading, text] of [['What it does', organ.function], ['Working together', organ.connection], ['What this app actually models', organ.model]]) {
             detail.append(element('h4', heading), element('p', text));
@@ -121,13 +92,6 @@ export function mountAnatomyWorkspace(container) {
     figure.addEventListener('click', event => {
         const target = event.target.closest('[data-organ]');
         if (target) selectOrgan(target.dataset.organ);
-    });
-    figure.addEventListener('keydown', event => {
-        const target = event.target.closest('svg [data-organ]');
-        if (target && (event.key === 'Enter' || event.key === ' ')) {
-            event.preventDefault();
-            selectOrgan(target.dataset.organ);
-        }
     });
 
     container.append(element('h3', 'Three connected organ agents'));
