@@ -65,29 +65,3 @@ bus.on('global-state-update', (changes) => {
     Object.assign(globalState, changes);
 });
 
-// Helper to get effective value including modifiers
-export const getEffectiveValue = (key, baseValue) => {
-    let val = baseValue;
-    // Apply user profile offsets if applicable (simple map)
-    if (key === 'heartRate' && baseValue === 70) { // crude check for baseline
-        // This logic is better handled in the systems, but here is a hook
-    }
-    return val;
-};
-
-// Fetch Research Data (Knowledge Base)
-export const fetchKnowledge = async () => {
-    try {
-        const res = await fetch('/api/parameters');
-        if (res.ok) {
-            const data = await res.json();
-            console.log("Updated Knowledge from Research:", data);
-            globalState.modifiers.research = data;
-        }
-    } catch (e) {
-        console.warn("Server offline or unreachable. Using defaults.");
-    }
-};
-
-// Initial fetch
-fetchKnowledge();

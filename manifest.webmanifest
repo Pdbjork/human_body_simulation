@@ -1,0 +1,12 @@
+{
+  "id": "./",
+  "name": "BjorkEd Body Lab",
+  "short_name": "Body Lab",
+  "description": "Private session-only educational physiology and personal health learning. Not a diagnostic medical device.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [{"src":"assets/body-lab.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+}

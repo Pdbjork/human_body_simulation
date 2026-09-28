@@ -4,33 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Body Multi-Agent Simulation</title>
+    <title>Body Lab · Personal Health Learning</title>
+    <meta name="theme-color" content="#121212">
+    <meta name="description" content="Private, session-only health learning, educational physiology, wearable imports and medical image viewing.">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/body-lab.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/health.css">
+    <link rel="stylesheet" href="css/anatomy.css">
+    <link rel="stylesheet" href="css/assistant.css">
+    <link rel="stylesheet" href="css/imaging.css">
+    <link rel="stylesheet" href="css/mental.css">
 </head>
 
 <body>
     <div class="app-container">
         <header>
-            <h1>Human Body Simulation <span class="version">v2.0</span></h1>
+            <h1>Body Lab <span class="version">Personal health learning</span></h1>
             <div class="main-controls">
                 <button id="btnThreat" class="control-btn danger">🚨 Threat (Fight/Flight)</button>
                 <button id="btnFood" class="control-btn action">🍔 Ingest Food</button>
                 <button id="btnRest" class="control-btn primary">🛌 Rest & Recover</button>
                 <button id="btnExercise" class="control-btn warning">🏃 Exercise</button>
+                <button id="btnPause" class="control-btn" aria-pressed="false">Pause simulation</button>
             </div>
         </header>
 
-        <main class="dashboard">
+        <section class="panel safety-banner" role="note" aria-label="Educational simulation notice">
+            <strong>Educational simulation — not medical advice.</strong>
+            This prototype visualizes simplified physiology for learning and product exploration. It does not diagnose, treat, or replace professional medical care.
+            Personal health files, conversations and check-ins remain in this browser tab's memory. They are not sent to the server or any AI provider. Closing or reloading the tab clears them. This does not make a shared device or browser extension private.
+        </section>
+
+        <nav class="workspace-tabs" role="tablist" aria-label="Body Lab workspaces">
+            <button role="tab" id="tab-simulation" aria-controls="simulation-workspace" aria-selected="true" data-workspace="simulation">Simulation</button>
+            <button role="tab" id="tab-anatomy" aria-controls="anatomy-workspace" aria-selected="false" tabindex="-1" data-workspace="anatomy">3D body & anatomy</button>
+            <button role="tab" id="tab-health" aria-controls="health-workspace" aria-selected="false" tabindex="-1" data-workspace="health">Wearables & profile</button>
+            <button role="tab" id="tab-assistant" aria-controls="assistant-workspace" aria-selected="false" tabindex="-1" data-workspace="assistant">Health assistant</button>
+            <button role="tab" id="tab-imaging" aria-controls="imaging-workspace" aria-selected="false" tabindex="-1" data-workspace="imaging">Medical images</button>
+            <button role="tab" id="tab-mental" aria-controls="mental-workspace" aria-selected="false" tabindex="-1" data-workspace="mental">Mental wellbeing</button>
+            <button role="tab" id="tab-departments" aria-controls="departments-workspace" aria-selected="false" tabindex="-1" data-workspace="departments">Departments</button>
+        </nav>
+        <div class="privacy-toolbar">
+            <span>Private session · no health-data account or cloud sync</span>
+            <button id="clear-personal-data" type="button">Clear all personal data</button>
+            <span id="privacy-status" role="status" aria-live="polite"></span>
+        </div>
+
+        <main class="dashboard" id="simulation-workspace" role="tabpanel" aria-labelledby="tab-simulation">
             <!-- Global Status Panel -->
             <section class="panel global-status">
-                <h2>Global State</h2>
+                <h2>Educational simulation · not measured health</h2>
                 <div class="status-grid">
                     <div class="stat-card">
                         <span class="label">Overall Status</span>
                         <span id="global-state" class="value">Nominal</span>
                     </div>
                     <div class="stat-card">
-                        <span class="label">Homeostasis</span>
+                        <span class="label">Toy homeostasis index</span>
                         <span id="homeostasis-score" class="value">100%</span>
                     </div>
                     <div class="stat-card">
@@ -59,41 +90,27 @@
                 </section>
 
                 <section class="panel visualization" id="body-viz">
-                    <div class="anatomy-placeholder">
-                        <div class="body-outline"></div>
+                    <div class="body-outline">
+                        <img src="assets/body-lab.svg" width="160" height="160" alt="Schematic human figure representing the educational model, not a medical scan">
                     </div>
+                    <p class="small-text">Explore the interactive model, organ layers and lessons in 3D body & anatomy.</p>
                 </section>
 
                 <section class="panel config-panel">
-                    <h3>👤 Configuration</h3>
+                    <h3>Scenario configuration</h3>
 
                     <div class="config-group">
-                        <label>Resting HR (bpm)</label>
-                        <input type="number" id="input-rhr" value="70" min="40" max="100">
+                        <label for="input-rhr">Simulation resting HR (bpm)</label>
+                        <input type="number" id="input-rhr" value="70" min="20" max="250">
                     </div>
 
                     <div class="config-group">
-                        <h4>Diagnoses / Conditions</h4>
+                        <h4>Hypothetical conditions · not inferred diagnoses</h4>
                         <div id="diagnoses-list" class="checkbox-list">
                             <!-- Populated by JS -->
                         </div>
                     </div>
 
-                    <div class="config-group">
-                        <h4>Apple Health Data</h4>
-                        <div class="file-drop-zone" id="drop-zone">
-                            <p>Drag 'export.xml' here or click</p>
-                            <input type="file" id="health-file" accept=".xml">
-                        </div>
-                        <div id="import-status" class="status-text"></div>
-                    </div>
-
-                    <div class="config-group">
-                        <h4>🌐 Global Knowledge Base</h4>
-                        <p class="small-text">Simulate scraping medical journals to update body parameters.</p>
-                        <button id="btn-research" class="control-btn action full-width">Research & Update</button>
-                        <div id="knowledge-status" class="status-text"></div>
-                    </div>
                 </section>
             </div>
 
@@ -108,8 +125,20 @@
                 <div id="immune-system" class="system-card"></div>
                 <div id="excretory-system" class="system-card"></div>
                 <div id="brain-system" class="system-card"></div>
+                <div id="lymphatic-system" class="system-card"></div>
+                <div id="sensory-system" class="system-card"></div>
+                <div id="thermoregulation-system" class="system-card"></div>
+                <div id="sleep-circadian-system" class="system-card"></div>
+                <div id="reproductive-system" class="system-card"></div>
             </section>
         </main>
+        <section class="panel workspace-panel" id="anatomy-workspace" role="tabpanel" aria-labelledby="tab-anatomy" hidden></section>
+        <section class="panel workspace-panel" id="health-workspace" role="tabpanel" aria-labelledby="tab-health" hidden></section>
+        <section class="panel workspace-panel" id="assistant-workspace" role="tabpanel" aria-labelledby="tab-assistant" hidden></section>
+        <section class="panel workspace-panel" id="imaging-workspace" role="tabpanel" aria-labelledby="tab-imaging" hidden></section>
+        <section class="panel workspace-panel" id="mental-workspace" role="tabpanel" aria-labelledby="tab-mental" hidden></section>
+        <section class="panel workspace-panel" id="departments-workspace" role="tabpanel" aria-labelledby="tab-departments" hidden></section>
+        <footer class="app-footer">BjorkEd Body Lab · Unvalidated educational models, not a medical device. For urgent symptoms, contact local emergency services.</footer>
     </div>
 
     <!-- Main Module -->

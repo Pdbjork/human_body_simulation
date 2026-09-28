@@ -4,7 +4,8 @@ import { DigestiveSystem, EndocrineSystem, MusculoskeletalSystem } from './syste
 import { ImmuneSystem, ExcretorySystem, BrainSystem } from './systems/defense_systems.js';
 import { LymphaticSystem, SensorySystem, ThermoregulationSystem, SleepCircadianSystem, ReproductiveSystem } from './systems/advanced_systems.js';
 import { Diagnoses, UserProfile } from './diagnoses.js';
-import { HealthParser } from './health_parser.js';
+import { mountWorkspaces } from './workspaces.js';
+import { createOrganSystems } from './anatomy-workspace.js';
 import './avatar.js'; // Initialize Avatar Bridge
 
 class HumanSimulation {
@@ -12,6 +13,7 @@ class HumanSimulation {
         this.systems = [];
         this.lastTime = 0;
         this.running = true;
+        this.frameId = null;
 
         this.init();
     }
@@ -34,6 +36,7 @@ class HumanSimulation {
         this.systems.push(new ThermoregulationSystem());
         this.systems.push(new SleepCircadianSystem());
         this.systems.push(new ReproductiveSystem());
+        this.systems.push(...createOrganSystems());
 
         // Link globally for debugging
         globalState.userProfile = UserProfile;
@@ -72,6 +75,18 @@ class HumanSimulation {
         document.getElementById('btnExercise').onclick = () => {
             bus.emit('start-exercise');
         };
+        const pause = document.getElementById('btnPause');
+        pause.onclick = () => {
+            this.running = !this.running;
+            pause.setAttribute('aria-pressed', String(!this.running));
+            pause.textContent = this.running ? 'Pause simulation' : 'Resume simulation';
+            if (this.running) {
+                this.lastTime = 0;
+                this.startLoop();
+            } else {
+                cancelAnimationFrame(this.frameId);
+            }
+        };
 
         // --- Health Data & Diagnoses UI ---
 
@@ -80,7 +95,12 @@ class HumanSimulation {
         if (rhrInput) {
             rhrInput.value = UserProfile.restingHeartRate;
             rhrInput.onchange = (e) => {
-                UserProfile.restingHeartRate = parseInt(e.target.value);
+                const value = Number(e.target.value);
+                if (!Number.isFinite(value) || value < 20 || value > 250) {
+                    e.target.value = UserProfile.restingHeartRate;
+                    return;
+                }
+                UserProfile.restingHeartRate = value;
                 // Reset HR to new baseline if resting
                 if (!globalState.threatDetected && globalState.atp > 50) {
                     globalState.heartRate = UserProfile.restingHeartRate;
@@ -95,13 +115,18 @@ class HumanSimulation {
             Object.values(Diagnoses).forEach(diag => {
                 const div = document.createElement('div');
                 div.className = 'diag-item';
-                div.innerHTML = `
-                    <label>
-                        <input type="checkbox" value="${diag.id}">
-                        ${diag.name}
-                    </label>
-                `;
-                const checkbox = div.querySelector('input');
+
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = diag.id;
+
+                const name = document.createElement('span');
+                name.textContent = diag.name;
+
+                label.append(checkbox, name);
+                div.appendChild(label);
+
                 checkbox.onchange = (e) => {
                     if (e.target.checked) {
                         UserProfile.diagnoses.add(diag.id);
@@ -113,90 +138,30 @@ class HumanSimulation {
             });
         }
 
-        // Apple Health Import
-        const fileInput = document.getElementById('health-file');
-        const statusText = document.getElementById('import-status');
-
-        if (fileInput) {
-            fileInput.onchange = (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                statusText.textContent = "Parsing XML... (This may take a moment)";
-                statusText.className = "status-text";
-
-                const reader = new FileReader();
-                reader.onload = (evt) => {
-                    try {
-                        const xmlContent = evt.target.result;
-                        const parser = new HealthParser();
-                        const data = parser.parse(xmlContent);
-
-                        console.log("Parsed Health Data:", data);
-
-                        if (data.restingHeartRate) {
-                            UserProfile.restingHeartRate = data.restingHeartRate;
-                            // Update UI
-                            if (rhrInput) rhrInput.value = data.restingHeartRate;
-
-                            // Reset Sim
-                            if (!globalState.threatDetected && globalState.atp > 50) {
-                                globalState.heartRate = UserProfile.restingHeartRate;
-                            }
-                        }
-
-                        if (data.averageSteps > 0) {
-                            // Simple logic: > 8000 steps = fit
-                            UserProfile.fitnessLevel = data.averageSteps > 8000 ? 1.5 : (data.averageSteps > 4000 ? 1.0 : 0.8);
-                        }
-
-                        statusText.textContent = `✅ Imported! RHR: ${data.restingHeartRate} | Avg Steps: ${data.averageSteps}`;
-                        statusText.className = "status-text success";
-
-                        // Contribute to Hive Mind
-                        fetch('/api/contribute', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(data)
-                        }).then(res => res.json())
-                            .then(res => console.log("Contributed to Hive Mind:", res))
-                            .catch(e => console.warn("Could not contribute data:", e));
-
-                    } catch (err) {
-                        console.error(err);
-                        statusText.textContent = "❌ Error parsing file.";
-                        statusText.className = "status-text error";
-                    }
-                };
-                reader.readAsText(file);
-            };
-        }
-
-        // Research Update Button
-        const btnResearch = document.getElementById('btn-research');
-        const researchStatus = document.getElementById('knowledge-status');
-        if (btnResearch) {
-            btnResearch.onclick = () => {
-                researchStatus.textContent = "Scraping medical databases...";
-                researchStatus.className = "status-text";
-
-                fetch('/api/update-knowledge', { method: 'POST' })
-                    .then(res => res.json())
-                    .then(data => {
-                        researchStatus.textContent = `✅ Knowledge Updated! (v${data.data.researchVersion})`;
-                        researchStatus.className = "status-text success";
-                        if (globalState.modifiers) globalState.modifiers.research = data.data;
-                    })
-                    .catch(e => {
-                        researchStatus.textContent = "❌ Server Error";
-                        researchStatus.className = "status-text error";
-                    });
-            };
-        }
+        window.addEventListener('body-health-updated', event => {
+            const profile = event.detail;
+            const baseline = profile?.consent && Number.isFinite(profile.restingHeartRate) ? profile.restingHeartRate : 70;
+            UserProfile.restingHeartRate = baseline;
+            if (rhrInput) rhrInput.value = baseline;
+            globalState.heartRate = baseline;
+        });
+        window.addEventListener('body-clear-personal-data', () => {
+            UserProfile.restingHeartRate = 70;
+            UserProfile.fitnessLevel = 1;
+            UserProfile.sleepQuality = 1;
+            UserProfile.diagnoses.clear();
+            if (rhrInput) rhrInput.value = 70;
+            diagContainer?.querySelectorAll('input').forEach(input => { input.checked = false; });
+            bus.emit('threat-cleared');
+            bus.emit('stop-exercise');
+            globalState.heartRate = 70;
+            document.getElementById('btnThreat').textContent = 'Threat (Fight/Flight)';
+            document.getElementById('btnThreat').classList.remove('active');
+        });
     }
 
     startLoop() {
-        requestAnimationFrame((t) => this.loop(t));
+        this.frameId = requestAnimationFrame((t) => this.loop(t));
     }
 
     loop(timestamp) {
@@ -210,7 +175,7 @@ class HumanSimulation {
         this.updateGlobalUI(timestamp);
 
         this.lastTime = timestamp;
-        if (this.running) requestAnimationFrame((t) => this.loop(t));
+        if (this.running) this.frameId = requestAnimationFrame((t) => this.loop(t));
     }
 
     updateGlobalUI(timestamp) {
@@ -250,4 +215,5 @@ class HumanSimulation {
 
 
 // Start app
+mountWorkspaces();
 window.app = new HumanSimulation();

@@ -1,5 +1,6 @@
 import { SystemAgent } from '../system-agent.js';
 import { bus, globalState } from '../state.js';
+import { organModelState } from './organ_systems.js';
 
 export class ImmuneSystem extends SystemAgent {
     constructor() {
@@ -33,17 +34,15 @@ export class ExcretorySystem extends SystemAgent {
     getIcon() { return '🧪'; }
 
     process(dt) {
-        if (globalState.adrenaline > 50) {
-            this.localState.status = 'Reduced Filtration';
-        } else {
-            this.localState.status = 'Optimal';
-        }
+        // Read-only overview: the Kidneys agent alone removes the urea pool.
+        this.localState.status = 'See Kidneys model';
     }
 
     getMetrics() {
         return {
-            'Filtration': this.localState.status,
-            'Hydration': 'Normal'
+            'Renal model': this.localState.status,
+            'Clearance factor': organModelState.clearance.toFixed(2) + ' /1 (toy)',
+            'Urea pool': organModelState.urea.toFixed(2) + ' AU (not a lab test)'
         };
     }
 }
