@@ -1,0 +1,249 @@
+.health-assistant {
+    min-width: 0;
+    line-height: 1.55;
+}
+
+.health-assistant p {
+    margin: 0.65rem 0;
+}
+
+.health-assistant .assistant-eyebrow {
+    color: #91e2d5;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.health-assistant .assistant-limit,
+.health-assistant .assistant-help,
+.health-assistant .assistant-context-summary {
+    color: #bdc9d6;
+    font-size: 0.9rem;
+}
+
+.health-assistant .assistant-safety,
+.health-assistant .assistant-privacy,
+.health-assistant .assistant-safety-fields {
+    padding: 1rem;
+    border: 1px solid #6a5438;
+    border-radius: 8px;
+    background: #2a231b;
+    margin: 1rem 0;
+}
+
+.health-assistant .assistant-privacy {
+    background: #172b2d;
+    border-color: #31575a;
+}
+
+.health-assistant .assistant-safety h3,
+.health-assistant .assistant-emergency h3,
+.health-assistant .assistant-crisis h3 {
+    font-weight: 700;
+    color: #ffceb2;
+}
+
+.health-assistant .assistant-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    cursor: pointer;
+    margin: 0.85rem 0;
+}
+
+.health-assistant .assistant-check input {
+    flex: 0 0 auto;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0.2rem 0 0;
+    accent-color: #6dddd0;
+}
+
+.health-assistant fieldset {
+    border: 1px solid #425260;
+    border-radius: 8px;
+    padding: 1rem;
+    min-width: 0;
+    margin: 0 0 1rem;
+}
+
+.health-assistant legend {
+    padding: 0 0.4rem;
+    font-weight: 600;
+}
+
+.health-assistant fieldset:disabled {
+    opacity: 0.65;
+}
+
+.health-assistant .assistant-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+    margin: 0.75rem 0;
+}
+
+.health-assistant .assistant-field > span {
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.health-assistant textarea,
+.health-assistant select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.65rem;
+    color: #edf5fa;
+    background: #12202c;
+    border: 1px solid #526777;
+    border-radius: 5px;
+    font: inherit;
+}
+
+.health-assistant textarea {
+    resize: vertical;
+    min-height: 6rem;
+}
+
+.health-assistant textarea::placeholder {
+    color: #a6b7c5;
+}
+
+.health-assistant :is(button, input, textarea, select, summary, a):focus-visible {
+    outline: 3px solid #77e4d9;
+    outline-offset: 3px;
+}
+
+.health-assistant .assistant-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+}
+
+.health-assistant summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.65rem 0;
+}
+
+.health-assistant .assistant-transcript {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 42rem;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    margin: 1rem 0;
+    scroll-margin-top: 1rem;
+    scrollbar-gutter: stable;
+}
+
+.health-assistant .assistant-transcript:empty {
+    display: none;
+}
+
+.health-assistant .assistant-user-message,
+.health-assistant .assistant-reply {
+    border: 1px solid #385060;
+    border-left: 4px solid #75cbbf;
+    background: #15242f;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.health-assistant .assistant-user-message {
+    margin-left: 1.5rem;
+    background: #1c2c38;
+    border-left-color: #8fa7bf;
+    white-space: pre-wrap;
+}
+
+.health-assistant .assistant-reply h3,
+.health-assistant .assistant-user-message h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.health-assistant .assistant-reply h4 {
+    font-size: 0.98rem;
+    margin: 0.9rem 0 0.3rem;
+}
+
+.health-assistant .assistant-reply ul {
+    padding-left: 1.35rem;
+    margin: 0.4rem 0;
+}
+
+.health-assistant .assistant-reply li {
+    margin: 0.45rem 0;
+}
+
+.health-assistant .assistant-emergency,
+.health-assistant .assistant-crisis {
+    background: #321f21;
+    border-color: #db8873;
+    border-left-width: 6px;
+}
+
+.health-assistant .assistant-urgent {
+    border-left-color: #e2b574;
+}
+
+.health-assistant .assistant-source-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 1rem;
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+}
+
+.health-assistant a {
+    color: #95ded9;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+
+.health-assistant .assistant-status {
+    color: #c6e5e1;
+    min-height: 1.5em;
+}
+
+.health-assistant .assistant-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.health-assistant button {
+    min-height: 44px;
+    white-space: normal;
+}
+
+.health-assistant .assistant-references {
+    margin-top: 1rem;
+    border-top: 1px solid #425260;
+}
+
+.health-assistant .assistant-references ul {
+    padding-left: 1.35rem;
+}
+
+@media (max-width: 650px) {
+    .health-assistant .assistant-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .health-assistant fieldset,
+    .health-assistant .assistant-safety-fields {
+        padding: 0.75rem;
+    }
+
+    .health-assistant .assistant-user-message {
+        margin-left: 0.5rem;
+    }
+}

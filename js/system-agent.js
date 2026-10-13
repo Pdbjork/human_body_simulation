@@ -5,7 +5,7 @@ export class SystemAgent {
         this.name = name;
         this.tickRateMs = tickRateMs;
         this.lastTick = 0;
-        this.containerId = `${name.toLowerCase().replace(' ', '-')}-system`;
+        this.containerId = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-system`;
         this.element = document.getElementById(this.containerId);
 
         // Local state separate from global

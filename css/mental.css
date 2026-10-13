@@ -1,0 +1,203 @@
+.mental-workspace {
+    line-height: 1.6;
+}
+
+.mental-workspace h3,
+.mental-workspace h4 {
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.mental-workspace a {
+    color: #80deea;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+}
+
+.mental-workspace a:focus-visible,
+.mental-workspace button:focus-visible,
+.mental-workspace input:focus-visible,
+.mental-workspace select:focus-visible,
+.mental-workspace textarea:focus-visible {
+    outline: 3px solid #ffe082;
+    outline-offset: 3px;
+}
+
+.mental-crisis {
+    border: 1px solid #c98d72;
+    border-left: 4px solid #e7a585;
+    background: #30231f;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+}
+
+.mental-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+.mental-card {
+    min-width: 0;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--bg-panel, #1e1e1e);
+}
+
+.mental-workspace .mental-note {
+    font-size: 0.9rem;
+    color: #c1c5ca;
+}
+
+.mental-workspace .mental-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    margin: 1rem 0;
+}
+
+.mental-consent input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    flex: 0 0 auto;
+    margin-top: 0.25rem;
+    accent-color: #80deea;
+}
+
+.mental-workspace fieldset {
+    min-width: 0;
+    padding: 0;
+    margin: 1rem 0;
+    border: none;
+}
+
+.mental-workspace legend {
+    padding: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.mental-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.mental-fields-grid label:last-child {
+    grid-column: 1 / -1;
+}
+
+.mental-workspace label {
+    display: block;
+}
+
+.mental-workspace select,
+.mental-workspace input[type="number"],
+.mental-workspace textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.7rem;
+    border: 1px solid #72777d;
+    border-radius: 5px;
+    background: #15191e;
+    color: #f0f2f4;
+    font: inherit;
+}
+
+.mental-workspace textarea {
+    resize: vertical;
+    min-height: 7rem;
+    margin-bottom: 0.8rem;
+}
+
+.mental-workspace :disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.mental-workspace fieldset:disabled {
+    opacity: 1;
+}
+
+.mental-workspace button {
+    min-height: 44px;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+.mental-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.mental-exercise-display {
+    margin: 1rem 0;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    background: #172c31;
+    border: 1px solid #42717b;
+}
+
+#mental-exercise-status {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+#mental-status {
+    min-height: 1.6em;
+    color: #b2dfdb;
+}
+
+.mental-entries {
+    padding: 0;
+    list-style: none;
+}
+
+.mental-entries li {
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color, #444);
+    overflow-wrap: anywhere;
+}
+
+.mental-entries time {
+    color: #b2dfdb;
+    font-weight: 600;
+}
+
+.mental-entry-note {
+    white-space: pre-wrap;
+}
+
+.mental-education li,
+.mental-crisis li {
+    margin-bottom: 0.65rem;
+}
+
+.mental-workspace [hidden] {
+    display: none !important;
+}
+
+@media (max-width: 850px) {
+    .mental-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 440px) {
+    .mental-fields-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mental-card {
+        padding: 0.8rem;
+    }
+}

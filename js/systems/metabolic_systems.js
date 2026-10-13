@@ -24,10 +24,8 @@ export class DigestiveSystem extends SystemAgent {
             this.isDigesting = false;
         } else if (this.isDigesting) {
             this.status = 'Digesting';
-            // Slowly convert glucose to glycogen/fat (abstracted) or just burn it
-            if (globalState.glucose > 80) {
-                bus.emit('request-hormone', { type: 'insulin', amount: 5 });
-            } else {
+            // The pancreas now senses glucose and owns hormone secretion.
+            if (globalState.glucose <= 80) {
                 this.isDigesting = false;
                 this.status = 'Idle';
             }
@@ -47,37 +45,28 @@ export class DigestiveSystem extends SystemAgent {
 export class EndocrineSystem extends SystemAgent {
     constructor() {
         super('Endocrine', 100);
-
-        bus.on('request-hormone', (req) => {
-            // Simply acknowledge for now, actual leveling handled in Nervous for stress
-            // But Insulin handled here
-            if (req.type === 'insulin') {
-                globalState.insulin = Math.min(100, globalState.insulin + req.amount);
-            }
-        });
     }
 
     getIcon() { return '🧬'; }
 
     process(dt) {
-        // Insulin regulation
+        // Peripheral tissue uptake only; pancreas owns insulin dynamics.
         let insulinEffectiveness = 1.0;
         if (globalState.activeConditions && globalState.activeConditions.has('diabetes_t2')) {
             insulinEffectiveness = 0.3; // Insulin resistance
         }
 
         if (globalState.insulin > 10) {
-            // Degrade over time
-            globalState.insulin -= 0.5;
-            // Insulin lowers glucose (modulated by sensitivity)
-            globalState.glucose = Math.max(70, globalState.glucose - (1 * insulinEffectiveness));
+            // Taper uptake as the pancreatic signal returns to baseline.
+            const uptake = Math.min(1, (globalState.insulin - 10) / 30) * insulinEffectiveness;
+            globalState.glucose = Math.max(70, globalState.glucose - uptake);
         }
     }
 
     getMetrics() {
         return {
-            'Insulin': Math.round(globalState.insulin) + ' µU/mL',
-            'Adrenaline': Math.round(globalState.adrenaline) + ' pg/mL'
+            'Insulin signal': Math.round(globalState.insulin) + ' /100 AU',
+            'Adrenaline signal': Math.round(globalState.adrenaline) + ' /100 AU'
         };
     }
 }
